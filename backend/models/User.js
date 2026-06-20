@@ -1,0 +1,45 @@
+const mongoose = require("mongoose");
+
+
+const purchaseSchema = new mongoose.Schema({
+  subjectPackId:{
+    type: mongoose.Schema.Types.ObjectId,
+    ref:"SubjectPack"
+  },
+  purchasedAt:{
+    type:Date
+  },
+  expiresAt:{
+    type:Date
+  },
+});
+
+const userSchema = new mongoose.Schema(
+  {
+    name:{
+      type:String,
+      require:true,
+      trim:true
+    },
+    
+    email:{
+      type:String,
+      require:true,
+      unique:true,
+      lowercase:true
+    },
+    password:{
+      type:String,
+      require:true,
+    },
+    role:{
+      type: String,
+      enum:["student","admin"],
+      default:"student",
+    },
+    purchases: [purchaseSchema]
+  },
+  {timestamps: true}
+);
+
+module.exports = mongoose.model("User",userSchema);
