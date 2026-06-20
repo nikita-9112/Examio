@@ -67,7 +67,50 @@ const createSubjectPack = async(req,res)=>{
   }
 };
 
+const getAllSubjectPacks = async(req,res) =>{
+  try{
+    const packs = await SubjectPack.find({isActive: true}).sort({createdAt: -1});
+
+    res.status(200).json({
+      success: true,
+      count: packs.length,
+      data: packs
+    });
+  }catch(error){
+    rs.status(500).json({
+      success: false,
+      message: error.message
+    });
+  }
+};
+
+const getSingleSubjectPack = async(req,res) =>{
+
+  try{
+    const pack = await SubjectPack.findById(req.params.id);
+
+    if(!pack){
+      return res.status(404).json({
+        success: false,
+        message: "Subject pack not found"
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      data: pack
+    });
+  }catch(error){
+
+    res.status(500).json({
+      success: false,
+      message: error.message
+    });
+  }
+}
 
 module.exports = {
-  createSubjectPack
-}
+  createSubjectPack,
+  getAllSubjectPacks,
+  getSingleSubjectPack
+};
