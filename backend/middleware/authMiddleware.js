@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 
-
+// its verify is there is any user or not.
 const protect = async (req,res,next) =>{
 
   try{
@@ -22,7 +22,7 @@ const protect = async (req,res,next) =>{
       req.user = await User.findById(decoded.id).select("-password");
       next();
     }else{
-
+     console.log("no access");
       return res.status(401).json({
         success: false,
         message: "Not authorized"
