@@ -18,6 +18,10 @@ const paperSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  publicId:{
+    type:String,
+    requied:true,
+  },
   uploadedAt:{
     type: Date,
     default: Date.now
@@ -80,6 +84,10 @@ const SubjectPackSchema = new mongoose.Schema({
   demoPdfUrl:{
     type: String,
     default: "",
+  },
+  demoPdfPublicId:{
+    type: String,
+    default: null
   },
   isActive:{
     type: Boolean,

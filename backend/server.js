@@ -22,6 +22,7 @@ const PORT = process.env.PORT || 5000
 app.use("/api/auth",require("./routes/authRoutes"));
 app.use("/api/admin",require("./routes/adminRoutes"));
 app.use("/api/subject-packs", require("./routes/subjectPackRoutes"));
+app.use("/api/upload",require("./routes/uploadRoutes"));
 
 app.listen(PORT,()=>{
   console.log(`server is running on port ${PORT}`);

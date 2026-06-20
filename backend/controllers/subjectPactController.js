@@ -1,5 +1,6 @@
 const SubjectPack = require("../models/SubjectPack");
 const slugify = require("slugify");
+const cloudinary = require("../config/cloudinary");
 
 const createSubjectPack = async(req,res)=>{
   try{
@@ -117,9 +118,10 @@ const addPaperToPack = async(req,res)=>{
       examType,
       fileName,
       pdfUrl,
+      publicId
     } = req.body;
 
-    if(!examYear || !examType || !pdfUrl || !fileName) {
+    if(!examYear || !examType || !pdfUrl || !fileName || !publicId) {
       return res.status(400).json({
         success: false,
         message: "all fields are required"
@@ -158,7 +160,8 @@ const addPaperToPack = async(req,res)=>{
       examYear,
       examType: examType.trim(),
       fileName,
-      pdfUrl
+      pdfUrl,
+      publicId
     });
 
     await pack.save();
@@ -205,6 +208,19 @@ const deletePaperFromPack = async(req,res)=>{
       });
     }
 
+    if( !paper.publicId){
+     res.status(404).json({
+      success:false,
+      message: "publicId for this pdf not exist"
+     })
+    }
+    await cloudinary.uploader.destroy(
+      paper.publicId,
+      {
+        resource_type:"raw"
+      }
+    );
+
     paper.deleteOne();
 
     await pack.save();
@@ -236,6 +252,7 @@ const updateSubjectPack = async(req,res)=>{
        description,
        thumbnailUrl,
        demoPdfUrl,
+       demoPdfPublicId,
        isActive
     } = req.body;
 
@@ -258,6 +275,10 @@ const updateSubjectPack = async(req,res)=>{
       pack.isActive = isActive
     }
 
+    if(demoPdfPublicId !== undefined){
+      pack.demoPdfPublicId = demoPdfPublicId;
+    }
+    
     await pack.save();
 
     res.status(200).json({
