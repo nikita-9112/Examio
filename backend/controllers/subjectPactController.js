@@ -221,10 +221,65 @@ const deletePaperFromPack = async(req,res)=>{
   }
 };
 
+const updateSubjectPack = async(req,res)=>{
+  try{
+    const pack = await SubjectPack.findById(req.params.id);
+
+    if(!pack){
+      return res.status(404).json({
+        success: false,
+        message: "Subject pack not found"
+      });
+    }
+
+    const {price,
+       description,
+       thumbnailUrl,
+       demoPdfUrl,
+       isActive
+    } = req.body;
+
+    if(price !== undefined){
+      pack.price = price;
+    }
+
+    if(description !== undefined){
+      pack.description = description
+    }
+    if(thumbnailUrl !== undefined){
+      pack.thumbnailUrl = thumbnailUrl
+    }
+
+    if(demoPdfUrl !== undefined){
+      pack.demoPdfUrl = demoPdfUrl
+    }
+
+    if(isActive !== undefined){
+      pack.isActive = isActive
+    }
+
+    await pack.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Subject pack updated successfully",
+      data: pack
+    });
+
+  }catch(error){
+    res.status(200).json({
+      success: false,
+      message: error.message
+    });
+  }
+};
+
+
 module.exports = {
   createSubjectPack,
   getAllSubjectPacks,
   getSingleSubjectPack,
   addPaperToPack,
-  deletePaperFromPack
+  deletePaperFromPack,
+  updateSubjectPack
 };
