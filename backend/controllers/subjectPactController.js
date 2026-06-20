@@ -107,10 +107,124 @@ const getSingleSubjectPack = async(req,res) =>{
       message: error.message
     });
   }
-}
+};
+
+const addPaperToPack = async(req,res)=>{
+  try{
+
+    const {
+      examYear,
+      examType,
+      fileName,
+      pdfUrl,
+    } = req.body;
+
+    if(!examYear || !examType || !pdfUrl || !fileName) {
+      return res.status(400).json({
+        success: false,
+        message: "all fields are required"
+      });
+    }
+
+    const currentYear = new Date().getFullYear();
+    if(examYear <2000 || examYear > currentYear+1){
+      return res.status(400).json({
+        success: false,
+        message: "Invalid exam year"
+      });
+    }
+    const pack = await SubjectPack.findById(req.params.id);
+
+    if(!pack){
+      return res.status(404).json({
+        success: false,
+        message: "Subject pack not found"
+      });
+    }
+  
+    const existingPaper = pack.papers.find(
+      paper =>
+      paper.examYear === Number(examYear) && 
+      paper.examType.toLowerCase() === examType.toLowerCase()
+    );
+
+    if(existingPaper){
+      return res.status(400).json({
+        success: false,
+        message: "Paper already exists for this exam year and exam type"
+      });
+    }
+    pack.papers.push({
+      examYear,
+      examType: examType.trim(),
+      fileName,
+      pdfUrl
+    });
+
+    await pack.save();
+
+    pack.papers.sort((a,b) =>{
+      if(b.examYear !== a.examYear){
+        return (b.examYear- a.examYear);
+      }
+      return b.uploadedAt- a.uploadedAt;
+    });
+    res.status(200).json({
+      success: true,
+      message: "Paper added successfully",
+      data: pack
+    });
+  }catch(error){
+    res.status(500).json({
+      success: false,
+      message: error.message
+    });
+  }
+};
+
+const deletePaperFromPack = async(req,res)=>{
+  try{
+
+    const {packId, paperId} = req.params;
+
+    const pack = await SubjectPack.findById(packId);
+
+    if(!pack){
+      return res.status(404).json({
+        success: false,
+        message: "Subject pack not found"
+      });
+    }
+
+    const paper = pack.papers.id(paperId);
+
+    if(!paper){
+      return res.status(404).json({
+        success: false,
+        message: "Paper not found"
+      });
+    }
+
+    paper.deleteOne();
+
+    await pack.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Paper deleted successfully",
+    })
+  }catch(error){
+    res.status(500).json({
+      success: false,
+      message: error.message
+    });
+  }
+};
 
 module.exports = {
   createSubjectPack,
   getAllSubjectPacks,
-  getSingleSubjectPack
+  getSingleSubjectPack,
+  addPaperToPack,
+  deletePaperFromPack
 };

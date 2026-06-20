@@ -4,10 +4,12 @@ const router = express.Router();
 
 const protect = require("../middleware/authMiddleware");
 const adminOnly = require("../middleware/adminMiddleware");
-const { createSubjectPack, getAllSubjectPacks, getSingleSubjectPack } = require("../controllers/subjectPactController");
+const { createSubjectPack, getAllSubjectPacks, getSingleSubjectPack, addPaperToPack, deletePaperFromPack } = require("../controllers/subjectPactController");
 
 router.get("/",getAllSubjectPacks);
 router.get("/:id",getSingleSubjectPack);
 router.post("/", protect,adminOnly, createSubjectPack);
+router.post("/:id/papers",protect,adminOnly,addPaperToPack);
+router.delete("/:packId/papers/:paperId",protect, adminOnly, deletePaperFromPack);
 
 module.exports = router;
