@@ -2,7 +2,6 @@
 
 // its verify that if user is exist then he is a student or admin
 const adminOnly = (req,res,next)=>{
-  console.log("inside admin ONly");
   if(!req.user){
     console.log("user not present");
     return res.status(401).json({
