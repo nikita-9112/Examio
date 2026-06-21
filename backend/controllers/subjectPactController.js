@@ -13,10 +13,11 @@ const createSubjectPack = async(req,res)=>{
       subjectCode,
       subjectName,
       description,
-      price
+      price,
+      isActive
     } = req.body;
 
-    if(!university || !course || !branch || !semester || !subjectCode || !subjectName  ){
+    if(!university || !course || !branch || !semester || !subjectCode || !subjectName  || isActive ){
       return res.status(400).json({
         success: false,
         message: "All requied fields are mandatory"
@@ -53,6 +54,7 @@ const createSubjectPack = async(req,res)=>{
       description,
       price,
       slug,
+      isActive,
       createdBy: req.user._id 
     });
 
@@ -72,10 +74,30 @@ const getAllSubjectPacks = async(req,res) =>{
   try{
     const packs = await SubjectPack.find({isActive: true}).sort({createdAt: -1});
 
+    const sanitizedPacks = packs.map(pack =>({
+      _id : pack.id,
+      university:pack.university,
+      course: pack.course,
+      branch: pack.branch,
+      semester: pack.semester,
+      subjectName:pack.subjectName,
+      subjectCode: pack.subjectCode,
+      price:pack.price,
+      demoPdfUrl: pack.demoPdfUrl,
+
+      papers: pack.papers.map(paper =>({
+        _id: paper._id,
+        examYear: paper.examYear,
+        examType: paper.examType,
+        fileName: paper.fileName,
+        uploadedAt: paper.uploadedAt,
+      }))
+    }));
+
     res.status(200).json({
       success: true,
-      count: packs.length,
-      data: packs
+      count: sanitizedPacks.length,
+      data: sanitizedPacks
     });
   }catch(error){
     rs.status(500).json({
@@ -90,16 +112,36 @@ const getSingleSubjectPack = async(req,res) =>{
   try{
     const pack = await SubjectPack.findById(req.params.id);
 
-    if(!pack){
+    if(!pack || pack.isActive === false){
       return res.status(404).json({
         success: false,
         message: "Subject pack not found"
       });
     }
 
+    const sanitizedPack = {
+      _id : pack.id,
+      university:pack.university,
+      course: pack.course,
+      branch: pack.branch,
+      semester: pack.semester,
+      subjectName:pack.subjectName,
+      subjectCode: pack.subjectCode,
+      price:pack.price,
+      demoPdfUrl: pack.demoPdfUrl,
+
+      papers: pack.papers.map(paper =>({
+        _id: paper._id,
+        examYear: paper.examYear,
+        examType: paper.examType,
+        fileName: paper.fileName,
+        uploadedAt: paper.uploadedAt,
+      }))
+    }
+
     res.status(200).json({
       success: true,
-      data: pack
+      data: sanitizedPack,
     });
   }catch(error){
 
@@ -295,6 +337,60 @@ const updateSubjectPack = async(req,res)=>{
   }
 };
 
+const deleteSubjectPack = async(req,res)=>{
+
+  try{
+    const {id} = req.params;
+
+    const pack = await SubjectPack.findById(id);
+
+    if(!pack){
+      return res.status(404).json({
+        success: false,
+        message: "Subject pack not found"
+      });
+    }
+
+    const deletePaperPromises = 
+    pack.papers
+    .filter(paper => paper.publicId)
+    .map(paper =>
+      cloudinary
+      .uploader.destroy(
+        paper.publicId,
+        {
+          resource_type: "raw"
+        }
+      ));
+
+    await Promise.all(deletePaperPromises);
+
+    if(pack.demoPdfPublicId){
+
+      await cloudinary
+      .uploader
+      .destroy(
+        pack.demoPdfPublicId,
+        {
+          resource_type: "raw"
+        }
+      );
+    }
+
+    await pack.deleteOne();
+
+    res.status(200).json({
+      success: true,
+      message: "Subject pack deleted successfully"
+    });
+
+  }catch(error){
+    res.status(500).json({
+      success: false,
+      message: error.message
+    });
+  }
+};
 
 module.exports = {
   createSubjectPack,
@@ -302,5 +398,6 @@ module.exports = {
   getSingleSubjectPack,
   addPaperToPack,
   deletePaperFromPack,
-  updateSubjectPack
+  updateSubjectPack,
+  deleteSubjectPack
 };
