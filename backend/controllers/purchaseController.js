@@ -86,8 +86,154 @@ const createPurchase = async(req,res) =>{
   }
 };
 
+const markPurchaseCompleted =async(req,res)=>{
+  try{
+
+    const {purchaseId} = req.body;
+
+    if(!purchaseId){
+      return res.status(400).json({
+        success: false,
+        message: "Purchase Id is required",
+      });
+    }
+
+    const purchase = await Purchase.findById(purchaseId);
+
+    if(!purchase){
+      return res.status(404).json({
+        success: false,
+        message: "Purchase not found"
+      });
+    }
+
+    // Already completed
+    if(purchase.status === "completed"){
+      return res.status(400).json({
+        success: false,
+        message: "Purchase already completed",
+      });
+    }
+
+    // only pending can become completed
+
+    if(purchase.status !== "pending"){
+      return res.status(400).json({
+        success: false,
+        message: "Only pending purchase can be completed",
+      });
+    }
+
+    const expiryDate = new Date();
+    expiryDate.setFullYear(expiryDate.getFullYear()+1);
+
+    purchase.status = "completed";
+    purchase.expiresAt = expiryDate;
+
+    await purchase.save();
+    return res.status(200).json({
+      success: true,
+      message: "Purchase completed successfully",
+      purchase,
+    });
+
+  }catch(error){
+    console.log(error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Error while completing purchase",
+      error: error.message,
+    });
+  }
+};
+
+const markPurchaseFailed = async(req,res)=>{
+  try{
+    const {purchaseId} = req.body;
+
+    if(!purchaseId){
+      return res.status(400).json({
+        success: false,
+        message: "PUrchase Id is required",
+      });
+
+    }
+
+    const purchase = await Purchase.findById(purchaseId);
+
+    if(!purchase){
+      return res.status(404).json({
+        success: false,
+        message: "Purchases not found",
+      });
+    }
+
+    if(purchase.status === "failed"){
+      return res.status(400).json({
+        message: "Purchase already failed",
+      });
+    }
+
+    if(purchase.status === "completed"){
+      return res.status(400).json({
+        success: false,
+        message: "Completed purchse cannot be marked failed",
+      });
+    }
+
+    purchase.status = "failed";
+    await purchase.save();
+
+    return res.status(200).json({
+      success: true,
+      message: "Purchase marked as failed",
+      purchase,
+    });
+
+  }catch(error){
+
+    console.log(error);
+    return res.status(500).json({
+      success: false,
+      message:"Error while marking purchase failed",
+      error: error.message,
+    });
+  }
+};
+
+const getMyPurchases = async(req,res)=>{
+  try{
+    const purchases = await Purchase.find({
+      user: req.user._id,
+      status:{
+        $in:["pending","completed"],
+      },
+    })
+    .populate("subjectPack","subjectName subjectCode price")
+    .sort({createdAt : -1});
+
+    return res.status(200).json({
+      success: true,
+      count: purchases.length,
+      purchases,
+    });
+
+  }catch(error){
+    console.log(error);
+    return res.status(500).json({
+      success: false,
+      message:"Error while fetching purchses",
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   createPurchase,
-}
+  markPurchaseCompleted,
+  markPurchaseFailed,
+  getMyPurchases,
+};
 
 

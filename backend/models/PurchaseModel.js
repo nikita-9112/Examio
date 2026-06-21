@@ -9,7 +9,7 @@ const purchaseSchema = new mongoose.Schema({
   },
   subjectPack:{
     type: mongoose.Schema.Types.ObjectId,
-    ref:"subjectPack",
+    ref:"SubjectPack",
     required: true,
     index: true,
   },
