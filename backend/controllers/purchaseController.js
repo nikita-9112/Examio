@@ -229,11 +229,43 @@ const getMyPurchases = async(req,res)=>{
   }
 };
 
+const checkPurchaseAccess = async(req,res)=>{
+
+  try{
+    const {subjectPackId} = req.params;
+
+    const purchase = await Purchase.findOne({
+      user : req.user._id,
+      subjectPack: subjectPackId,
+      status:"completed",
+      expiresAt:{
+        $gt: new Date(),
+      },
+    });
+
+    return res.status(200).json({
+      success: true,
+      hashAccess: !!purchase,
+    });
+
+  }catch(error){
+    console.log(error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Error while checking access",
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   createPurchase,
   markPurchaseCompleted,
   markPurchaseFailed,
   getMyPurchases,
+  checkPurchaseAccess
+  
 };
 
 
