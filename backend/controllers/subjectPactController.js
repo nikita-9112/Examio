@@ -1,6 +1,7 @@
 const SubjectPack = require("../models/SubjectPack");
 const slugify = require("slugify");
 const cloudinary = require("../config/cloudinary");
+const { isValidObjectId } = require("mongoose");
 
 const createSubjectPack = async(req,res)=>{
   try{
@@ -17,7 +18,7 @@ const createSubjectPack = async(req,res)=>{
       isActive
     } = req.body;
 
-    if(!university || !course || !branch || !semester || !subjectCode || !subjectName  || isActive ){
+    if(!university || !course || !branch || !semester || !subjectCode || !subjectName  || !price ){
       return res.status(400).json({
         success: false,
         message: "All requied fields are mandatory"
@@ -110,7 +111,16 @@ const getAllSubjectPacks = async(req,res) =>{
 const getSingleSubjectPack = async(req,res) =>{
 
   try{
-    const pack = await SubjectPack.findById(req.params.id);
+
+    const subjectPackId = req.params.id;
+
+    if(!isValidObjectId(subjectPackId)){
+      return res.status(400).json({
+        success: false,
+        message: "Invalid Subject Pack Id",
+      })
+    };
+    const pack = await SubjectPack.findById(subjectPackId);
 
     if(!pack || pack.isActive === false){
       return res.status(404).json({
@@ -177,6 +187,12 @@ const addPaperToPack = async(req,res)=>{
         message: "Invalid exam year"
       });
     }
+    if(!isValidObjectId(req.params.id)){
+      return res.status(400).json({
+        success: false,
+        message: "Invalid Subject pack Id",
+      })
+    }
     const pack = await SubjectPack.findById(req.params.id);
 
     if(!pack){
@@ -231,6 +247,18 @@ const deletePaperFromPack = async(req,res)=>{
   try{
 
     const {packId, paperId} = req.params;
+    if(!isValidObjectId(packId)){
+      return res.status(400).json({
+        success: false,
+        message: "Invalid Subject pack Id",
+      })
+    }
+    if(!isValidObjectId(paperId)){
+      return res.status(400).json({
+        success: false,
+        message: "Invalid Subject pack Id",
+      })
+    }
 
     const pack = await SubjectPack.findById(packId);
 
@@ -281,6 +309,14 @@ const deletePaperFromPack = async(req,res)=>{
 
 const updateSubjectPack = async(req,res)=>{
   try{
+
+    if(!isValidObjectId(req.params.id)){
+      return res.status(400).json({
+        success: false,
+        message: "Invalid Subject pack Id",
+      })
+    }
+
     const pack = await SubjectPack.findById(req.params.id);
 
     if(!pack){
@@ -341,6 +377,13 @@ const deleteSubjectPack = async(req,res)=>{
 
   try{
     const {id} = req.params;
+
+    if(!isValidObjectId(id)){
+      return res.status(400).json({
+        success: false,
+        message: "Invalid Subject pack Id",
+      })
+    }
 
     const pack = await SubjectPack.findById(id);
 

@@ -15,6 +15,13 @@ const createPurchase = async(req,res) =>{
       });
     }
 
+    if(!isValidObjectId(subjectPackId)){
+      return res.status(400).json({
+        success: false,
+        message: "Invalid Subject pack Id",
+      })
+    }
+
     // check subject pack
     const subjectPack = await SubjectPack.findById(subjectPackId);
 
@@ -98,6 +105,13 @@ const markPurchaseCompleted =async(req,res)=>{
       });
     }
 
+    if(!isValidObjectId(purchaseId)){
+      return res.status(400).json({
+        success: false,
+        message: "Invalid Subject pack Id",
+      })
+    }
+
     const purchase = await Purchase.findById(purchaseId);
 
     if(!purchase){
@@ -158,6 +172,13 @@ const markPurchaseFailed = async(req,res)=>{
         message: "PUrchase Id is required",
       });
 
+    }
+
+    if(!isValidObjectId(purchaseId)){
+      return res.status(400).json({
+        success: false,
+        message: "Invalid Subject pack Id",
+      })
     }
 
     const purchase = await Purchase.findById(purchaseId);
@@ -234,6 +255,13 @@ const checkPurchaseAccess = async(req,res)=>{
   try{
     const {subjectPackId} = req.params;
 
+    if(!isValidObjectId(subjectPackId)){
+      return res.status(400).json({
+        success: false,
+        message: "Invalid Subject pack Id",
+      })
+    }
+
     const purchase = await Purchase.findOne({
       user : req.user._id,
       subjectPack: subjectPackId,
@@ -259,12 +287,59 @@ const checkPurchaseAccess = async(req,res)=>{
   }
 };
 
+const getFullPaper = async(req,res)=>{
+  try{
+
+    const {subjectPackId } = req.params;
+    
+    if(!isValidObjectId(subjectPackId)){
+      return res.status(400).json({
+        success: false,
+        message: "Invalid Subject pack Id",
+      })
+    }
+
+    const subjectPack = await SubjectPack.findById(subjectPackId);
+
+    if(!subjectPack){
+      return res.status(404).json({
+        success: false,
+        message: "Subject Pack not found",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      papers: subjectPack.papers.map(
+        (paper)=>({
+          _id: paper._id,
+          year: paper.examYear,
+          examType: paper.examType,
+          fileName:paper.fileName,
+          pdfUrl: paper.pdfUrl,
+        })
+      )
+    });
+
+  }catch(error){
+
+    console.log(error);
+
+    return res.status(500).json({
+      success: false,
+      message: "error while fetching papwers",
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   createPurchase,
   markPurchaseCompleted,
   markPurchaseFailed,
   getMyPurchases,
-  checkPurchaseAccess
+  checkPurchaseAccess,
+  getFullPaper
   
 };
 
