@@ -1,3 +1,6 @@
+import { useState } from "react";
+import {Eye , EyeOff} from "lucide-react";
+
 const Input = ({
   label,
   type = "text",
@@ -7,6 +10,8 @@ const Input = ({
   error,
   required = false,
   }) => {
+
+    const [showPassword, setShowPassword] = useState(false);
   return (
   <div className="w-full">
   
@@ -21,8 +26,11 @@ const Input = ({
       </label>
     )}
   
-    <input
-      type={type}
+  <div className="relative">
+  <input
+      type={
+        type === "password"? showPassword?"text": "password":type
+      }
       placeholder={placeholder}
       value={value}
       onChange={onChange}
@@ -43,6 +51,15 @@ const Input = ({
         }
       `}
     />
+    {type === "password" &&(
+      <button type="button" onClick={()=>setShowPassword(!showPassword)}
+      className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500"
+      >
+        {showPassword? <EyeOff size={18}/> : <Eye size={18}/>}
+      </button>
+    )}
+  </div>
+   
   
     {error && (
       <p className="mt-1 text-sm text-red-500">
