@@ -54,6 +54,8 @@ import SubjectPackCard from "../components/SubjectPackCard";
 import HeroSection from "../components/HeroSection";
 import SearchInput from "../components/SearchInput";
 import Footer from "../components/Footer";
+import { useEffect, useState } from "react";
+import { getAllSubjectPacks } from "../sevices/subjectService";
 
 
 
@@ -88,6 +90,32 @@ const demoPacks = [
   }
 ]
 const HomePage = () => {
+
+  const [subjectPacks, setSubjectPacks] = useState([]);
+  const [loading ,setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+
+  const fetchSubjectPacks = async ()=>{
+    try{
+      setLoading(true);
+      const response = await getAllSubjectPacks();
+      setSubjectPacks(response.data);
+      console.log(subjectPacks);
+      setError("");
+    }catch(err){
+      console.log(err);
+
+      setError("Failed to load subject packs");
+    }finally{
+      setLoading(false);
+    }
+  };
+
+  useEffect(()=>{
+    fetchSubjectPacks();
+  },[]);
+
 return (
 <div className="p-10">
 
@@ -128,10 +156,10 @@ return (
  
 
   <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-    {demoPacks.map((pack)=>(
+    {subjectPacks.map((pack)=>(
       <SubjectPackCard 
-      key={pack.slug}
-      {...pack}
+      key={pack._id}
+      pack={pack}
       />
     ))}
   </div>
