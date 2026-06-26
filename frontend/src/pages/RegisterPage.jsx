@@ -6,9 +6,12 @@ import api from "../sevices/api";
 import Card from "../components/ui/Card";
 import Input from "../components/ui/Input";
 import Button from "../components/ui/Button";
+import { saveAuth } from "../utils/auth";
+import { useAuth } from "../context/AuthContext";
 
 const RegisterPage = () => {
 
+  const {login} = useAuth();
   const navigate = useNavigate();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -27,9 +30,8 @@ const RegisterPage = () => {
       
       const {token, user} = response.data;
 
-      localStorage.setItem("token", token);
-
-      localStorage.setItem("user", JSON.stringify(user));
+      saveAuth(token,user);
+      login(user);
 
       navigate("/");
     }catch(error){

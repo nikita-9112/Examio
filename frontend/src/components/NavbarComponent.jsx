@@ -1,8 +1,19 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import Button from "./ui/Button";
+import { useAuth } from "../context/AuthContext";
 
 const Navbar = () => {
+
+  const {user, logout} = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = ()=>{
+    logout();
+    navigate("/");
+  }
+
+
 return (
 <header
 className="
@@ -84,25 +95,44 @@ py-3
 
     {/* Actions */}
 
-    <div
-      className="
-        flex
-        items-center
-        gap-3
-      "
-    >
-      <Link to="/login">
-        <Button variant="outline" size="sm">
-          Login
-        </Button>
-      </Link>
+{user? 
+   <div
+   className="
+     flex
+     items-center
+     gap-3
+   "
+ >
+   <span>Hi, {user.name}</span>
 
-      <Link to="/register">
-        <Button size="sm">
-          Get Started
-        </Button>
-      </Link>
-    </div>
+     <Button size="sm" variant="secondary" onClick={handleLogout}>
+       logout
+     </Button>
+ </div>
+: 
+<div
+className="
+  flex
+  items-center
+  gap-3
+"
+>
+<Link to="/login">
+  <Button variant="outline" size="sm">
+    Login
+  </Button>
+</Link>
+
+<Link to="/register">
+  <Button size="sm">
+    Get Started
+  </Button>
+</Link>
+</div>
+}
+   
+
+
   </div>
 </header>
 

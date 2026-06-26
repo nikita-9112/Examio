@@ -6,11 +6,15 @@ import Card from "../components/ui/Card";
 import Input from "../components/ui/Input";
 import Button from "../components/ui/Button";
 import {GraduationCap} from "lucide-react";
+import { saveAuth } from "../utils/auth";
+import { useAuth } from "../context/AuthContext";
 
 const LoginPage = () => {
 
   const navigate = useNavigate();
 
+
+  const {login} = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -24,9 +28,8 @@ const LoginPage = () => {
 
       const {token, user} = response.data;
 
-      localStorage.setItem("token",token);
-      localStorage.setItem("user", JSON.stringify(user));
-
+      saveAuth(token, user);
+      login(user);
       navigate("/");
     }catch(error){
       console.log(error.response?.data);
