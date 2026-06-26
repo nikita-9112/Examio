@@ -56,39 +56,11 @@ import SearchInput from "../components/SearchInput";
 import Footer from "../components/Footer";
 import { useEffect, useState } from "react";
 import { getAllSubjectPacks } from "../sevices/subjectService";
+import SkeletonCard from "../components/ui/SkeletonCard";
 
 
 
-const demoPacks = [
-  {
-    subjectName:"ADA",
-    subjectCode:"CS501",
-    semester:5,
-    price:40,
-    slug:"cs501-ada"
-  },
-  {
-    subjectName:"SE",
-    subjectCode:"CS504",
-    semester:5,
-    price:40,
-    slug:"cs501-se"
-  },
-  {
-    subjectName:"DBMS",
-    subjectCode:"CS502",
-    semester:5,
-    price:40,
-    slug:"cs501-dbms"
-  },
-  {
-    subjectName:"Operating system",
-    subjectCode:"CS501",
-    semester:5,
-    price:40,
-    slug:"cs501-os"
-  }
-]
+
 const HomePage = () => {
 
   const [subjectPacks, setSubjectPacks] = useState([]);
@@ -98,17 +70,19 @@ const HomePage = () => {
 
   const fetchSubjectPacks = async ()=>{
     try{
-      setLoading(true);
+  
       const response = await getAllSubjectPacks();
-      setSubjectPacks(response.data);
-      console.log(subjectPacks);
+      setTimeout(()=>{
+        setSubjectPacks(response.data);
+        setLoading(false);
+      }, 5000)
+      // setSubjectPacks(response.data);
+      // console.log(subjectPacks);
       setError("");
     }catch(err){
       console.log(err);
 
       setError("Failed to load subject packs");
-    }finally{
-      setLoading(false);
     }
   };
 
@@ -155,14 +129,28 @@ return (
     </h2>
  
 
+  
+{loading? (
   <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-    {subjectPacks.map((pack)=>(
-      <SubjectPackCard 
-      key={pack._id}
-      pack={pack}
-      />
+   
+    {[1,2,3,4,5,6].map((item)=>(
+      <div>
+        <SkeletonCard key={item}/>
+        </div>
+      
     ))}
-  </div>
+    </div>
+):(
+  <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+  {subjectPacks.map((pack)=>(
+    <SubjectPackCard 
+    key={pack._id}
+    pack={pack}
+    />
+  ))}
+</div>
+)}
+ 
 </section>
 
 
