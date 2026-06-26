@@ -1,4 +1,6 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import api from "../sevices/api";
 
 import Card from "../components/ui/Card";
 import Input from "../components/ui/Input";
@@ -6,6 +8,31 @@ import Button from "../components/ui/Button";
 import {GraduationCap} from "lucide-react";
 
 const LoginPage = () => {
+
+  const navigate = useNavigate();
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleSubmit = async(e) =>{
+    e.preventDefault();
+    try{
+      const response = await api.post("/auth/login",{
+        email,
+        password,
+      });
+
+      const {token, user} = response.data;
+
+      localStorage.setItem("token",token);
+      localStorage.setItem("user", JSON.stringify(user));
+
+      navigate("/");
+    }catch(error){
+      console.log(error.response?.data);
+    }
+  }
+
 return (
 <div
 className="
@@ -49,21 +76,26 @@ px-5
       Sign in to continue your preparation.
     </p>
 
-    <form className="mt-8 space-y-5">
+    <form className="mt-8 space-y-5" onSubmit={handleSubmit}>
 
       <Input
         label="Email"
         type="email"
         placeholder="Enter your email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
       />
 
       <Input
         label="Password"
         type="password"
         placeholder="Enter your password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
       />
 
       <Button
+        type="submit"
         className="w-full"
       >
         Login
