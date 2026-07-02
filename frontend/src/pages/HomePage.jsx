@@ -58,6 +58,7 @@ import { useEffect, useState } from "react";
 import { getAllSubjectPacks } from "../sevices/subjectService";
 import SkeletonCard from "../components/ui/SkeletonCard";
 import EmptyState from "../components/ui/EmptyState";
+import ErrorState from "../components/ui/ErrorState";
 
 
 
@@ -66,7 +67,7 @@ const HomePage = () => {
 
   const [subjectPacks, setSubjectPacks] = useState([]);
   const [loading ,setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [error, setError] = useState(false);
 
 
   const fetchSubjectPacks = async ()=>{
@@ -76,13 +77,13 @@ const HomePage = () => {
       setTimeout(()=>{
         setSubjectPacks(response.data);
         setLoading(false);
-      }, 5000)
+      }, 2000)
     
-      setError("");
+      setError(false);
     }catch(err){
       console.log(err);
 
-      setError("Failed to load subject packs");
+      setError(true);
     }
   };
 
@@ -141,7 +142,11 @@ return (
     ))}
     </div>
 
-) : subjectPacks.length === 0 ? (
+) : error ? (
+   
+  <ErrorState/>
+
+): subjectPacks.length === 0 ? (
   <EmptyState/>
 
 ):(
