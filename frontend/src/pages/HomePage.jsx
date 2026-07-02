@@ -57,6 +57,7 @@ import Footer from "../components/Footer";
 import { useEffect, useState } from "react";
 import { getAllSubjectPacks } from "../sevices/subjectService";
 import SkeletonCard from "../components/ui/SkeletonCard";
+import EmptyState from "../components/ui/EmptyState";
 
 
 
@@ -76,8 +77,7 @@ const HomePage = () => {
         setSubjectPacks(response.data);
         setLoading(false);
       }, 5000)
-      // setSubjectPacks(response.data);
-      // console.log(subjectPacks);
+    
       setError("");
     }catch(err){
       console.log(err);
@@ -130,7 +130,7 @@ return (
  
 
   
-{loading? (
+{loading ? (
   <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
    
     {[1,2,3,4,5,6].map((item)=>(
@@ -140,6 +140,10 @@ return (
       
     ))}
     </div>
+
+) : subjectPacks.length === 0 ? (
+  <EmptyState/>
+
 ):(
   <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
   {subjectPacks.map((pack)=>(
