@@ -74,10 +74,8 @@ const HomePage = () => {
     try{
   
       const response = await getAllSubjectPacks();
-      setTimeout(()=>{
-        setSubjectPacks(response.data);
-        setLoading(false);
-      }, 2000)
+      setSubjectPacks(response.data);
+      setLoading(false);
     
       setError(false);
     }catch(err){

@@ -1,13 +1,17 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { BookOpen,Building2, FileText, ArrowRight } from "lucide-react";
 
 import Card from "./ui/Card";
 import Button from "./ui/Button";
 
 const SubjectPackCard = ({pack}) => {
+
+  const navigate = useNavigate();
+
 return (
-<Card className="group flex flex-col justify-between">
-<div>
+
+<Card className="group flex flex-col justify-between hover: -translate-y-1 transitio-all duration-300" >
+<div onClick={()=> navigate(`/subject/${pack._id}`)}>
    
 
     <div className="flex items-center justify-between gap-3">
@@ -51,7 +55,7 @@ return (
 
   </div>
 
-  <div className="mt-6">
+  {/* <div className="mt-6">
    
     <div className="mt-4 flex gap-3">
       <Link to={`/subject`} className="flex-1">
@@ -63,7 +67,7 @@ return (
         Buy Now
       </Button>
     </div>
-  </div>
+  </div> */}
 </Card>
 
 );

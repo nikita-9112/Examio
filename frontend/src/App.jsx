@@ -18,7 +18,7 @@ function App() {
           <Route path='/' element={<HomePage/>}/>
           <Route path='/login' element={<LoginPage/>} />
           <Route path='/register' element={<Registerpage/>} />
-          <Route path='/subject/:slug' element={<SubjectDetailsPage/>} />
+          <Route path='/subject/:id' element={<SubjectDetailsPage/>} />
           <Route path='*' element={<NotFoundPage/>} />
         </Routes>
       </MainLayout>

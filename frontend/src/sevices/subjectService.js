@@ -6,3 +6,8 @@ export const getAllSubjectPacks = async () =>{
   return response.data;
 
 }
+export const getSingleSubjectPack = async (id) =>{
+  console.log(id);
+  const response = await api.get(`/subject-packs/${id}`);
+  return response.data;
+}
