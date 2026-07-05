@@ -7,6 +7,7 @@ import { ArrowLeft, Building2, GraduationCap, BookOpen, IndianRupee, Package, Fi
 import Button from "../components/ui/Button";
 import TrustFeature from "../components/subject/TrustFeatures";
 import BuySection from "../components/subject/BuySection";
+import useSubjectAccess from "../hooks/useSubjectAccess";
 
 
 const SubjectDetailsPage = ()=>{
@@ -19,6 +20,8 @@ const SubjectDetailsPage = ()=>{
   const [ error, setError] = useState(false);
   const [pdfLoading, setPdfLoading] = useState(false);
   const [pdferror, setPdfError] = useState(false);
+
+  const {hasAccess} = useSubjectAccess(id);
 
   const fetchSubjectPack =async ()=>{
     try{
@@ -42,6 +45,7 @@ const SubjectDetailsPage = ()=>{
     fetchSubjectPack();
   },[id]);
 
+  console.log(hasAccess);
 
   const papers = subjectPack?.papers || [];
   // const demoPdfUrl = subjectPack?.demoPdfUrl || "";
@@ -49,7 +53,6 @@ const SubjectDetailsPage = ()=>{
    `${import.meta.env.VITE_API_URL}/public/${subjectPack.demoPdfUrl}` : null;
 
 
-  console.log(demoPdfUrl);
   return(
   
 <div className="mx-auto max-w-4xl px-4 py-8">
