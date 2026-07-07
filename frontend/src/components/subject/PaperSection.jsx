@@ -1,8 +1,8 @@
 
-import {Package, FileText, CheckCircle2} from "lucide-react";
+import {Package, FileText, CheckCircle2, Lock} from "lucide-react";
 
 
-const PaperSection = ({subjectPack})=>{
+const PaperSection = ({subjectPack, hasAccess})=>{
 
   const papers = subjectPack?.papers || [];
 
@@ -49,8 +49,10 @@ const PaperSection = ({subjectPack})=>{
   
                   </div>
                 </div>
-  
-                <CheckCircle2 className="h-5 w-5 text-green-500" />
+                <div>
+                  {hasAccess? <CheckCircle2 className="h-5 w-5 text-green-500" />: <Lock className="h-5 w-5 text-green-500" />}
+                </div>
+                
               </div>
             ))
           ):(

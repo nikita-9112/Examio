@@ -56,13 +56,13 @@ const SubjectDetailsPage = ()=>{
       <NavigateBack/>
 
 {/* hero section */}
-      <Hero subjectPack={subjectPack}/>
+      <Hero subjectPack={subjectPack} hasAccess={hasAccess}/>
 
 {/* trust feature section */}
     <TrustFeature/>
 
 {/* What's include section / Paper section */}
-      <PaperSection subjectPack={subjectPack}/>
+      <PaperSection subjectPack={subjectPack}  hasAccess={hasAccess}/>
 
 {/* demo /preview section.. */}
         <DemoPdfSection subjectPack={subjectPack} />
