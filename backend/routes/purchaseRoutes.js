@@ -14,7 +14,7 @@ router.get("/full-papers/:subjectPackId", protect, hasPackAccess, getFullPaper);
 
 
 // for middleware working check.
-router.get("/protected/:subjectPackId",protect, hasPackAccess, (req,res) =>{ 76918104
+router.get("/protected/:subjectPackId",protect, hasPackAccess, (req,res) =>{
 
   return res.status(200).json({
     success: true,

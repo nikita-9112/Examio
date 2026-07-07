@@ -1,6 +1,7 @@
 
 const SubjectPack = require("../models/SubjectPack");
 const Purchase = require("../models/PurchaseModel");
+const isValidObjectId = require("../utils/isValidObjectId");
 
 
 const createPurchase = async(req,res) =>{
@@ -273,7 +274,7 @@ const checkPurchaseAccess = async(req,res)=>{
 
     return res.status(200).json({
       success: true,
-      hashAccess: !!purchase,
+      hasAccess: !!purchase,
     });
 
   }catch(error){
