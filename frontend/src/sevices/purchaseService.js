@@ -1,6 +1,6 @@
 import api from "./api";
 
-const purchaseService = {
+export const purchaseService = {
  
   checkAccess : async (subjectPackId) =>{
     
@@ -10,6 +10,20 @@ const purchaseService = {
 
      return response.data;
   },
+
+  getFullPapers : async (subjectPackId) =>{
+    try{
+
+      const response = await api.get(`v1/purchase/full-papers/${subjectPackId}`);
+
+      return response.data;
+
+    }catch(error){
+      console.error(error);
+
+      throw error;
+    }
+  }
 };
 
 export default purchaseService;

@@ -1,7 +1,7 @@
 import Button from "../ui/Button";
 
 
-const BuySection = ({subjectPack})=>{
+const BuySection = ({subjectPack, BuySectionRef})=>{
 
 
   const handleBuy = async()=>{
@@ -10,7 +10,8 @@ const BuySection = ({subjectPack})=>{
 
   const papersCount = subjectPack?.papers?.length ?? 0;
   return(
-    <section className="rounded-t-2xl border border-slate-200 bg-white p-5 shadow-lg sticky bottom-0 z-30 ">
+    <section className="rounded-t-2xl border border-slate-200 bg-white p-5 shadow-lg sticky bottom-0 z-30 "
+    ref={BuySectionRef}>
       
       <div className="flex gap-4 items-center justify-evenly ">
 

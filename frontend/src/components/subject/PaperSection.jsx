@@ -2,7 +2,7 @@
 import {Package, FileText, CheckCircle2, Lock} from "lucide-react";
 
 
-const PaperSection = ({subjectPack, hasAccess})=>{
+const PaperSection = ({subjectPack, hasAccess, onPaperClick})=>{
 
   const papers = subjectPack?.papers || [];
 
@@ -32,7 +32,9 @@ const PaperSection = ({subjectPack, hasAccess})=>{
           {papers.length >0 ? (
              papers.map((paper)=>(
               <div key={paper._id}
-              className="flex items-center justify-between  rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 transition-all duration-300 hover:border-blue-300 hover:bg-blue-50">
+              className="flex items-center justify-between  rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 transition-all duration-300 hover:border-blue-300 hover:bg-blue-50" 
+              
+              onClick={()=>onPaperClick(paper._id)}>
   
                 <div className="flex items-center gap-3">
                   <FileText className="h-5 w-5 text-blue-600" />

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import {getSingleSubjectPack} from "../sevices/subjectService";
 
@@ -10,9 +10,13 @@ import Hero from "../components/subject/Hero";
 import PaperSection from "../components/subject/PaperSection";
 import DemoPdfSection from "../components/subject/DemoPdfSection";
 import NavigateBack from "../components/ui/NavigateBack";
+import { isAuthenticated } from "../utils/auth";
+import purchaseService from "../sevices/purchaseService";
+
 
 
 const SubjectDetailsPage = ()=>{
+  
   const {id} = useParams();
   const navigate = useNavigate();
 
@@ -20,6 +24,7 @@ const SubjectDetailsPage = ()=>{
   
   const [loading, setLoading] = useState(true);
   const [ error, setError] = useState(false);
+  const BuySectionRef = useRef(null);
   
 
   const {hasAccess} = useSubjectAccess(id);
@@ -44,6 +49,45 @@ const SubjectDetailsPage = ()=>{
   }
   }
 
+
+
+  const handlePaperClick = async (paperId) =>{
+    
+    if(!isAuthenticated()){
+      navigate("/login");
+      return;
+    }
+    if(!hasAccess){
+      BuySectionRef.current?.scrollIntoView({
+        behavior:"smooth",
+        block: "start",
+      });
+      console.log("hii")
+      return;
+
+    }
+   
+    const res = await purchaseService.getFullPapers(id);
+
+    const selectedPaper = res.papers.find((paper)=> paper._id === paperId);
+ 
+    if(!selectedPaper){
+      console.error("Paper not found");
+      return;
+    }
+    if(!selectedPaper.pdfUrl){
+      console.error("pdf url not found!!");
+      return;
+    }
+
+
+     // const demoPdfUrl = subjectPack?.demoPdfUrl || "";
+     const newPdf = selectedPaper?.pdfUrl?
+     `${import.meta.env.VITE_API_URL}/public/${selectedPaper.pdfUrl}` : null;
+
+    window.open(newPdf, "_blank");
+  }
+
   useEffect(()=>{
     fetchSubjectPack();
   },[id]);
@@ -62,7 +106,7 @@ const SubjectDetailsPage = ()=>{
     <TrustFeature/>
 
 {/* What's include section / Paper section */}
-      <PaperSection subjectPack={subjectPack}  hasAccess={hasAccess}/>
+      <PaperSection subjectPack={subjectPack}  hasAccess={hasAccess} onPaperClick={handlePaperClick}/>
 
 {/* demo /preview section.. */}
         <DemoPdfSection subjectPack={subjectPack} />
@@ -71,16 +115,16 @@ const SubjectDetailsPage = ()=>{
 
 {/* buy section */}
 
-      {!canAccess ? 
-        <BuySection subjectPack={subjectPack}/>
+    {!canAccess ? 
+        <BuySection subjectPack={subjectPack} BuySectionRef={BuySectionRef}/>
       :
         <div>
           <span>full access</span>
           <p>Valid until</p>
           <p>Coming soon...</p>
         </div>
-      }
-        
+}
+ 
   </div>
  
   )
