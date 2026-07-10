@@ -232,7 +232,7 @@ const getMyPurchases = async(req,res)=>{
         $in:["pending","completed"],
       },
     })
-    .populate("subjectPack","subjectName subjectCode price")
+    .populate("subjectPack")
     .sort({createdAt : -1});
 
     return res.status(200).json({

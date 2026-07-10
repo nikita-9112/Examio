@@ -44,7 +44,7 @@ const LibraryCard = ({pack})=>{
 
           <p className="mt-3 text-slate-700 flex  items-center font-medium">
           <Building2 size={18} className="text-purple-600 mr-2"/>
-            {pack.university}
+            {pack.subjectPack.university}
           </p>
 
           <div className="mt-4 flex items-center justify-between">

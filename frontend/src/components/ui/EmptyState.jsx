@@ -3,8 +3,8 @@ import { Inbox } from "lucide-react";
 
 
 const EmptyState = ({
-  title = "No Subject Packs Found",
-  description = "New solved PYQs will be added soon. Please check back later.", 
+  title,
+  description , 
 })=>{
 
   return(

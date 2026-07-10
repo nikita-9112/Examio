@@ -8,6 +8,9 @@ const { createSubjectPack, getAllSubjectPacks, getSingleSubjectPack, addPaperToP
 
 router.get("/",getAllSubjectPacks);
 router.get("/:id",getSingleSubjectPack);
+
+
+
 router.post("/", protect,adminOnly, createSubjectPack);
 router.put("/:id", protect, adminOnly, updateSubjectPack);
 router.delete("/:id",protect,adminOnly, deleteSubjectPack);

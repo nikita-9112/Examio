@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+
 import LibraryCard from "./LibraryCard";
 import purchaseService from "../../../sevices/purchaseService";
 import { BookOpen } from "lucide-react";
 import EmptyState from "../../ui/EmptyState";
+import ErrorState from "../../ui/ErrorState";
 import SkeletonCard from "../../ui/SkeletonCard";
 
 
@@ -152,58 +153,30 @@ const library = [
 
   },
 ]
-const MyLibrary = ()=>{
+const MyLibrary = ({loading, error, library})=>{
 
-  const [library, setLibrary] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
-
-  const fetchLibrary = async() =>{
-    try{
-      const res = await purchaseService.getMyPurchases();
-      console.log(res);
-      setLibrary(res.purchases);
-
-    }catch(error){
-      console.error(error);
-    }finally{
-      setLoading(false);
-    }
-  }
-  useEffect(()=>{
-    setTimeout(()=>{
-      fetchLibrary();
-    },5000)
-    
-  },[]);
+ 
 
   return(
-
     <section className="px-6 py-16 ">
    <h2 className="mb-10 text-center text-3xl font-bold">
         My Library
     </h2>
  
-
-  
 {loading ? (
   <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
    
-    {[1,2,3,4,5,6].map((item)=>(
+    {[1,2].map((item)=>(
       <div>
         <SkeletonCard key={item}/>
         </div>
-      
     ))}
     </div>
 
 ) : error ? (
-   
-  <ErrorState/>
-
+     <ErrorState/>
 ): library.length === 0 ? (
-  <EmptyState/>
-
+  <EmptyState  title={"You haven't purchased any subject packs yet"} description={"Purchase a subject pack to access solved PYQs"}/>
 ):(
   <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
   {library.map((pack)=>(
@@ -214,7 +187,6 @@ const MyLibrary = ()=>{
   ))}
 </div>
 )}
- 
 </section>
   )
 }

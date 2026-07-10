@@ -145,7 +145,7 @@ return (
   <ErrorState/>
 
 ): subjectPacks.length === 0 ? (
-  <EmptyState/>
+  <EmptyState title={"No Subject Packs Found"} description={"New solved PYQs will be added soon. Please check back later."}/>
 
 ):(
   <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
