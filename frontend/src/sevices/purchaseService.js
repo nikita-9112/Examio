@@ -23,7 +23,13 @@ export const purchaseService = {
 
       throw error;
     }
+  },
+  
+  getMyPurchases : async() =>{
+    const response = await api.get("v1/purchase/my-purchases");
+    return response.data;
   }
+
 };
 
 export default purchaseService;

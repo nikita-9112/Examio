@@ -33,7 +33,7 @@ const RegisterPage = () => {
       saveAuth(token,user);
       login(user);
 
-      navigate("/");
+      navigate("/dashboard");
     }catch(error){
 
       console.log(error.response?.data);
