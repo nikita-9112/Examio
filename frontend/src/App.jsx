@@ -12,6 +12,7 @@ import AdminLayout from './admin/layouts/AdminLayout';
 import Dashboard from './admin/pages/Dashboard';
 import SubjectPacks from './admin/pages/SubjectPacks';
 import ManagePapers from './admin/pages/ManagePapers';
+import AddSubjectPack from './admin/pages/AddSubjectPack';
 
 function App() {
 
@@ -35,6 +36,7 @@ function App() {
             <Route index element={<Dashboard/>} />
             <Route path='/admin/subject-packs' element={<SubjectPacks/>} />
             <Route path='/admin/subject-packs/:id' element={<ManagePapers/>} />
+            <Route path='/admin/subject-pack/new' element={<AddSubjectPack/>}/>
           </Route>
         </Routes>
     </BrowserRouter>

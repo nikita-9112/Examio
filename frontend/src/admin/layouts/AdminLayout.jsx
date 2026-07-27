@@ -5,9 +5,9 @@ import AdminSidebar from "../components/AdminSidebar";
 const AdminLayout = ()=>{
 
   return(
-    <div>
+    <div className="flex bg-gray-50 min-h-screen">
       <AdminSidebar/>
-      <main className="flex-1 p-6">
+      <main className="flex-1 p-8">
         <Outlet/>
       </main>
     </div>
