@@ -6,8 +6,9 @@ placeholder = "Search subject or code...",
 return (
 <div
 className="
-mx-auto
 flex
+mx-auto
+items-center
 max-w-2xl
 items-center
 rounded-2xl
@@ -21,6 +22,7 @@ transition-all
 duration-200
 focus-within:border-blue-500
 focus-within:shadow-md
+
 "
 >
 <Search

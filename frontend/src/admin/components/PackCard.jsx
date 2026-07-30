@@ -4,6 +4,7 @@ import { ArrowRight, BookOpen, Building2, DotSquare, FileText, MenuIcon, MenuSqu
 
 const PackCard = ({pack})=>{
 
+  console.log(pack);
 
   return(
     <div className=" p-6 bg-gradient-to-r from-blue-100 via-white to-purple-100 shadow-sm border border-slate-200 rounded-2xl  shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-pointer  min-h-[210px] ">
@@ -16,17 +17,17 @@ const PackCard = ({pack})=>{
           <div className="flex-1 text-center ">
             <div className="flex items-center">
               <h1 className="text-2xl font-bold text-slate-900 mr-1">
-                {pack.subjectPack.subjectName}
+                {pack.subjectName}
               </h1>
               <span className=" inline-block rounded-full bg-purple-600 px-2 py-1 text-xs font-semibold text-white">
-                {pack.subjectPack.subjectCode}
+                {pack.subjectCode}
               </span>
             </div>
          
             <div className=" flex flex-wrap items-center gap-3 text-slate-700 font-semibold text-sm">
-              <span>• Semester {pack.subjectPack.semester}</span>
-              <span>• {pack.subjectPack.course}</span>
-              <span>• {pack.subjectPack.branch}</span>
+              <span>• Semester {pack.semester}</span>
+              <span>• {pack.course}</span>
+              <span>• {pack.branch}</span>
            </div>
 
 
@@ -44,7 +45,7 @@ const PackCard = ({pack})=>{
 
           <p className="mt-3 text-slate-700 flex  items-center font-medium text-sm">
           <Building2 size={18} className="text-purple-600 mr-2"/>
-            {pack.subjectPack.university}
+            {pack.university}
           </p>
 
           <div className="mt-4 flex items-center justify-between">
@@ -59,7 +60,7 @@ const PackCard = ({pack})=>{
 
             <div className="mt-5 flex justify-between items-center hover:-translate-x-1 transition-all duration-300 pointer-cursor hover:bg-indigo-50">
                   <span className="text-green-700 font-medium text-xs">
-                  updatedAt: {pack.subjectPack.updatedAt}
+                  updatedAt: {pack.updatedAt}
                   </span>
                  
                 </div>

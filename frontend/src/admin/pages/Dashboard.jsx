@@ -1,173 +1,60 @@
 import { BookOpen, FileText, ShoppingBag } from "lucide-react";
+import { Link } from "react-router-dom";
 import OverviewCard from "../components/OverviewCard";
 import PackCard from "../components/PackCard";
-
-
-
-const Packs = [
-  {
-    subjectPack:{
-      _id :1,
-      university:"RGPV",
-      course: "Btech",
-      branch: "CSE",
-      semester: 4,
-      subjectName:"Ada",
-      subjectCode: "CS-401",
-      price:30,
-      demoPdfUrl:"demo",
-        
-    },
-    papers: [
-      {
-      _id: "p11",
-      examYear: 2024,
-      examType:"june",
-      fileName:"ada-june",
-      uploadedAt: 2026,
-    },
-      {
-      _id: "p21",
-      examYear: 2024,
-      examType:"june",
-      fileName:"ada-june",
-      uploadedAt: 2026,
-    },
-      {
-      _id: "p31",
-      examYear: 2024,
-      examType:"june",
-      fileName:"ada-june",
-      uploadedAt: 2026,
-    },
-  ]
-  
-  },
-  {
-    subjectPack:{
-      _id :2,
-      university:"RGPV",
-      course: "Btech",
-      branch: "CSE",
-      semester: 4,
-      subjectName:"Ada",
-      subjectCode: "CS-401",
-      price:30,
-      demoPdfUrl:"demo",
-      updatedAt:"2 jun 2026",
-        
-    },
-    papers: [
-      {
-      _id: "p12",
-      examYear: 2024,
-      examType:"june",
-      fileName:"ada-june",
-      uploadedAt: 2026,
-    },
-      {
-      _id: "p22",
-      examYear: 2024,
-      examType:"june",
-      fileName:"ada-june",
-      uploadedAt: 2026,
-    },
-      {
-      _id: "p32",
-      examYear: 2024,
-      examType:"june",
-      fileName:"ada-june",
-      uploadedAt: 2026,
-    },
-  ]
-
-  },
-
- 
-  {
-    subjectPack:{
-      _id :3,
-      university:"RGPV",
-      course: "Btech",
-      branch: "CSE",
-      semester: 4,
-      subjectName:"Ada",
-      subjectCode: "CS-401",
-      price:30,
-      demoPdfUrl:"demo",
-      updatedAt:"2 jun 2026",
-        
-    },
-    papers: [
-      {
-      _id: "p13",
-      examYear: 2024,
-      examType:"june",
-      fileName:"ada-june",
-      uploadedAt: 2026,
-    },
-      {
-      _id: "p23",
-      examYear: 2024,
-      examType:"june",
-      fileName:"ada-june",
-      uploadedAt: 2026,
-    },
-      {
-      _id: "p33",
-      examYear: 2024,
-      examType:"june",
-      fileName:"ada-june",
-      uploadedAt: 2026,
-    },
-  ]
-
-  },
-  {
-
-    subjectPack:{
-      _id :4,
-      university:"RGPV",
-      course: "Btech",
-      branch: "CSE",
-      semester: 4,
-      subjectName:"Ada",
-      subjectCode: "CS-401",
-      price:30,
-      demoPdfUrl:"demo",
-      updatedAt:"2 jun 2026",
-    },
-      papers: [
-        {
-        _id: "p14",
-        examYear: 2024,
-        examType:"june",
-        fileName:"ada-june",
-        uploadedAt: 2026,
-      },
-        {
-        _id: "p24",
-        examYear: 2024,
-        examType:"june",
-        fileName:"ada-june",
-        uploadedAt: 2026,
-      },
-        {
-        _id: "p34",
-        examYear: 2024,
-        examType:"june",
-        fileName:"ada-june",
-        uploadedAt: 2026,
-      },
-    ]
-    
-
-  },
-]
+import { useEffect, useState } from "react";
+import {getAllSubjectPacks} from "../../sevices/subjectService";
+import SkeletonCard from "../../components/ui/SkeletonCard";
+import ErrorState from "../../components/ui/ErrorState";
+import EmptyState from "../../components/ui/EmptyState";
 
 const Dashboard = () =>{
-  return(
+
+  const [packs, setPacks] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  const fetchSubjectPacks = async() =>{
+
+    try{
     
+      setLoading(true);
+      setError("");
+      const response = await getAllSubjectPacks();
+      console.log(response);
+      setPacks(response.data || []);
+      setLoading(false);
+
+
+    }
+    catch(error){
+      setError(error);
+    }
+  }
+
+  useEffect(()=>{
+    fetchSubjectPacks();
+  },[])
+
+  const DisplayedPack = packs? packs.slice(0,3) : [];
+
+  if(loading){
+    return(
+      <div>
+        <SkeletonCard />
+      </div>
+    )
+  }
+  if(error){
+    return(
+      <div>
+        <ErrorState />
+      </div>
+    )
+  }
+
+  return(
+  
     <section className="space-y-10">
 
     {/* header */}
@@ -199,30 +86,25 @@ const Dashboard = () =>{
         <h2 className="text-2xl font-semibold">
           Latest Subject Packs
         </h2>
-        <button className="text-blue-600 hover:underline font-medium">
+        <Link to="/admin/subject-packs" className="text-blue-600 hover:underline font-medium">
           View All 
-        </button>
+        </Link>
       </div>
       {/* pack cards will come here */}
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {Packs.map((pack) =>(
+      { DisplayedPack.length === 0 ?
+        <EmptyState  title="No Subject Pack Added"
+        description="Add Subject Pack " />
+        :
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {DisplayedPack.map((pack) =>(
          
      
-          <PackCard  key={pack.subjectPack._id} pack={pack}/>
+          <PackCard  key={pack._id} pack={pack}/>
     
         ))}
       </div>
-
-    {/* <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-  
-          <PackCard />          
-          <PackCard />          
-          <PackCard />          
-
-
-      </div>  */}
-
+      }
     </div>
     </section>
   )

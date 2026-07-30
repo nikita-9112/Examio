@@ -96,7 +96,7 @@ return (
     <HeroSection/>
 
     {/* search papers */}
-    <section className="px-6 pb-12 mt-12">
+    <section className="px-6 pb-12 mt-12 mx-auto">
       <SearchInput/>
      
     </section>
