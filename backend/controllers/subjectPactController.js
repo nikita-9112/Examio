@@ -15,7 +15,9 @@ const createSubjectPack = async(req,res)=>{
       subjectName,
       description,
       price,
-      isActive
+      isActive,
+      demoPdfUrl,
+      demoPdfPublicId,
     } = req.body;
 
     if(!university || !course || !branch || !semester || !subjectCode || !subjectName  || !price ){
@@ -56,6 +58,8 @@ const createSubjectPack = async(req,res)=>{
       price,
       slug,
       isActive,
+      demoPdfUrl:demoPdfUrl || "",
+      demoPdfPublicId: demoPdfPublicId || "",
       createdBy: req.user._id 
     });
 

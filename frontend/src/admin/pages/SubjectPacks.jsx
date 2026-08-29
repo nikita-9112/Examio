@@ -65,7 +65,7 @@ const SubjectPacks = ()=>{
           </p>
         </div>
 
-        <Link to="/admin/addSubject-packs" className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-xl transition">
+        <Link to='/admin/subject-pack/new' className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-xl transition">
         <PlusCircle size={18} />
         Add Subject Pack
         </Link>

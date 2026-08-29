@@ -1,7 +1,5 @@
 const fs = require("fs");
-
 const cloudinary = require("../config/cloudinary");
-
 const uploadPdf = async(req,res)=>{
   try{
     if(!req.file){
@@ -10,7 +8,6 @@ const uploadPdf = async(req,res)=>{
         message: "No file uploaded"
       });
     }
-
     const folder = req.body.folder || "question-papers";
     const result = await cloudinary.uploader.upload(
       req.file.path,
