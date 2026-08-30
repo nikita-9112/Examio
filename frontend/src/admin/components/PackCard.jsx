@@ -8,6 +8,7 @@ const PackCard = ({
   pack,
   handleToggleStatus,
   toggleingPackId,
+  handleDeletePack,
 })=>{
 
   const [menuOpen, setMenuOpen] = useState(false);
@@ -33,7 +34,7 @@ const PackCard = ({
 
   const handleDelete = () =>{
     setMenuOpen(false);
-    console.log("Delete pack: ", pack._id);
+    handleDeletePack(pack);
   }
 
   return(
@@ -100,8 +101,12 @@ const PackCard = ({
                   <div className="my-2 border-t border-slate-100"/>
 
                   {/* delete */}
-                  <button type="button" onClick={handleDelete} className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 tansition">
-                    <Trash2 size={17}/>
+                  <button
+                    type="button"
+                    onClick={handleDelete}
+                    className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition"
+                  >
+                    <Trash2 size={17} />
                     Delete Subject Pack
                   </button>
 
