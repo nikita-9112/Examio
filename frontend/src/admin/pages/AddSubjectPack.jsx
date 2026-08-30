@@ -5,21 +5,7 @@ import SubjectPackForm from "../components/SubjectPackForm";
 
 const AddSubjectPack = () =>{
   const navigate = useNavigate();
-
-  // const [formData, setFormData] = useState({
-  //   university:"",
-  //   course:"",
-  //   branch:"",
-  //   semester:"",
-  //   subjectCode:"",
-  //   subjectName:"",
-  //   description:"",
-  //   price:"",
-  //   isActive: true,
-  // });
-
-
-
+  
   const handleCancel = () =>{
     navigate("/admin/subject-packs");
   }

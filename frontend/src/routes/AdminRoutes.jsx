@@ -8,6 +8,7 @@ import SubjectPacks from '../admin/pages/SubjectPacks';
 import ManagePapers from '../admin/pages/ManagePapers';
 import AddSubjectPack from '../admin/pages/AddSubjectPack';
 import AddDemoPdfPage from '../admin/pages/AddDemoPdfPage';
+import EditSubjectPack from "../admin/pages/EditSubjectPack";
 
 
 const AdminRoutes = () =>{
@@ -21,6 +22,7 @@ const AdminRoutes = () =>{
               <Route index element={<Dashboard/>} />
               <Route path='subject-packs' element={<SubjectPacks/>} />
               <Route path='subject-packs/:id' element={<ManagePapers/>} />
+              <Route path="subject-packs/:id/edit" element={<EditSubjectPack/>}/>
               <Route path='subject-pack/new' element={<AddSubjectPack/>}/>
               <Route path='subject-pack/new-demo' element={<AddDemoPdfPage/>}/>
           

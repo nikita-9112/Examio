@@ -1,17 +1,33 @@
 import { useSubjectPackCreation } from "../contex/SubjectPackCreationContext";
 
 
-const SubjectPackForm = ()=>{
+const SubjectPackForm = ({
+  mode="create",
+  formData: externalFormData,
+  onChange:externalOnChange,
+})=>{
 
-  const {subjectPackData, updateSubjectPackData} = useSubjectPackCreation();
+  // for create mode
+  const context  = useSubjectPackCreation();
+  const subjectPackData =  
+  mode === "edit" ? externalFormData : context.subjectPackData;
  
   const handlechange = (e)=>{
     const {name, value, type, checked } = e.target;
 
-    updateSubjectPackData({
+    if(mode === "edit"){
+      externalOnChange({
+        [name]:type === "checkbox" ? checked : value,
+      });
+      return;
+    }
+
+    context.updateSubjectPackData({
       [name]:type === "checkbox"? checked: value,
     });
   };
+
+  if(!subjectPackData) return null;
 
   return(
     <div className="space-y-8">
@@ -38,7 +54,7 @@ const SubjectPackForm = ()=>{
 
             <select 
             name="university"
-            value={subjectPackData.university}
+            value={subjectPackData.university || ""}
             onChange={handlechange}
             className="w-full px-4 py-3 rounded-xl border border-gray-300 bg-white outline-none focus:ring-2 focus:ring-blue-500"
             >
@@ -55,7 +71,7 @@ const SubjectPackForm = ()=>{
 
             <select  
             name="course"
-            value={subjectPackData.course} 
+            value={subjectPackData.course || ""} 
             onChange={handlechange}
             className="w-full px-4 py-3 rounded-xl border border-gray-300 bg-white outline-none focus:ring-2 focus:ring-blue-500"
             >
@@ -72,7 +88,7 @@ const SubjectPackForm = ()=>{
             </label>
 
             <select name="branch"
-            value={subjectPackData.branch}
+            value={subjectPackData.branch || ""}
             onChange={handlechange}
             className="w-full px-4 py-3 rounded-xl border border-gray-300 bg-white outline-none focus:ring-2 focus:ring-blue-500"
             >
@@ -91,7 +107,7 @@ const SubjectPackForm = ()=>{
             </label>
 
             <select name="semester"
-            value={subjectPackData.semester}
+            value={subjectPackData.semester || ""}
             onChange={handlechange}
             className="w-full px-4 py-3 rounded-xl border border-gray-300 bg-white outline-none focus:ring-2 focus:ring-blue-500"
             >
@@ -119,7 +135,7 @@ const SubjectPackForm = ()=>{
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Subject Name
                 </label>
-                <input type="text" name="subjectName" value={subjectPackData.subjectName} onChange={handlechange}
+                <input type="text" name="subjectName" value={subjectPackData.subjectName || ""} onChange={handlechange}
                 placeholder="e.g. Design and Analysis of Algorithems"
                 className="w-full px-4 py-3 rounded-xl border border-gray-300 bg-white outline-none focus:ring-2 focus:ring-blue-500"
                 />
@@ -130,7 +146,7 @@ const SubjectPackForm = ()=>{
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Subject Code
                 </label>
-                <input type="text" name="subjectCode" value={subjectPackData.subjectCode} onChange={handlechange} 
+                <input type="text" name="subjectCode" value={subjectPackData.subjectCode || ""} onChange={handlechange} 
                 placeholder="e.g. CS-403"
                 className="w-full px-4 py-3 rounded-xl border border-gray-300 bg-white outline-none focus:ring-2 focus:ring-blue-500"
                 />
@@ -143,7 +159,7 @@ const SubjectPackForm = ()=>{
                   <span>(optional)</span>
                 </label>
 
-                <textarea  name="description" value={subjectPackData.description} onChange={handlechange} rows={4} 
+                <textarea  name="description" value={subjectPackData.description || ""} onChange={handlechange} rows={4} 
                 placeholder="e.g. Briefly describe what this subject pack cintains..."
                 className="w-full px-4 py-3 rounded-xl border border-gray-300 bg-white outline-none focus:ring-2 focus:ring-blue-500"
                 />
@@ -176,7 +192,7 @@ const SubjectPackForm = ()=>{
                     ₹ 
                   </span>
                   
-                  <input type="number" name="price" min="0" value={subjectPackData.price} defaultValue="20" onChange={handlechange} 
+                  <input type="number" name="price" min="0" value={subjectPackData.price ?? ""} defaultValue="20" onChange={handlechange} 
                   className="w-full  pl-9 pr-4 py-3 rounded-xl border border-gray-300 bg-white outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
@@ -189,7 +205,7 @@ const SubjectPackForm = ()=>{
                 </label>
 
                 <label className="flex items-center gap-3 h-[48px] cursor-pointer">
-                  <input type="checkbox" name="isActive" checked={subjectPackData.isActive} onChange={handlechange} className="w-5 h-5 accent-blue-600"/>
+                  <input type="checkbox" name="isActive" checked={Boolean(subjectPackData.isActive)} onChange={handlechange} className="w-5 h-5 accent-blue-600"/>
 
                   <div>
                     <p className="text-sm font-medium text-gray-700">

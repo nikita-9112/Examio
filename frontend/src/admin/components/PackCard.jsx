@@ -16,6 +16,7 @@ const PackCard = ({pack})=>{
 
   const handleEdit = () =>{
     setMenuOpen(false);
+    navigate(`/admin/subject-packs/${pack._id}/edit`);
     console.log("Edit Pack:", pack._id);
   };
 

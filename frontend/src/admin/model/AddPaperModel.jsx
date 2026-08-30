@@ -111,11 +111,11 @@ const AddPaperModal = ({
                 Select exam type
               </option>
 
-              <option value="June Semester">
+              <option value="June ">
                 june Semester
               </option>
 
-              <option value="December Semester">
+              <option value="December ">
                 December Semester
               </option>
 

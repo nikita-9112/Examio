@@ -391,43 +391,88 @@ const updateSubjectPack = async(req,res)=>{
       });
     }
 
-    const {price,
-       description,
-       thumbnailUrl,
-       demoPdfUrl,
-       demoPdfPublicId,
-       isActive
+    const {
+      university,
+      course,
+      branch,
+      semester,
+      subjectCode,
+      subjectName,
+      price,
+      description,
+      thumbnailUrl,
+      demoPdfUrl,
+      demoPdfPublicId,
+      isActive,
     } = req.body;
-
-    if(price !== undefined){
+    
+    
+    // Academic information
+    
+    if (university !== undefined) {
+      pack.university = university;
+    }
+    
+    if (course !== undefined) {
+      pack.course = course;
+    }
+    
+    if (branch !== undefined) {
+      pack.branch = branch;
+    }
+    
+    if (semester !== undefined) {
+      pack.semester = semester;
+    }
+    
+    
+    // Subject information
+    
+    if (subjectCode !== undefined) {
+      pack.subjectCode = subjectCode;
+    }
+    
+    if (subjectName !== undefined) {
+      pack.subjectName = subjectName;
+    }
+    
+    
+    // Pack details
+    
+    if (price !== undefined) {
       pack.price = price;
     }
-
-    if(description !== undefined){
-      pack.description = description
+    
+    if (description !== undefined) {
+      pack.description = description;
     }
-    if(thumbnailUrl !== undefined){
-      pack.thumbnailUrl = thumbnailUrl
+    
+    if (isActive !== undefined) {
+      pack.isActive = isActive;
     }
-
-    if(demoPdfUrl !== undefined){
-      pack.demoPdfUrl = demoPdfUrl
+    
+    
+    // Optional media fields
+    
+    if (thumbnailUrl !== undefined) {
+      pack.thumbnailUrl = thumbnailUrl;
     }
-
-    if(isActive !== undefined){
-      pack.isActive = isActive
+    
+    if (demoPdfUrl !== undefined) {
+      pack.demoPdfUrl = demoPdfUrl;
     }
-
-    if(demoPdfPublicId !== undefined){
+    
+    if (demoPdfPublicId !== undefined) {
       pack.demoPdfPublicId = demoPdfPublicId;
     }
     
+    
     await pack.save();
-
+    
     res.status(200).json({
       success: true,
       message: "Subject pack updated successfully",
-      data: pack
+      data: pack,
     });
 
   }catch(error){
