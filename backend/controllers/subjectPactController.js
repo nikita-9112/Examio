@@ -165,6 +165,67 @@ const getSingleSubjectPack = async(req,res) =>{
     });
   }
 };
+const getAllSubjectPacksforAdmin = async(req,res) =>{
+  try{
+
+    const packs = await SubjectPack.find({}).sort({createdAt: -1});
+
+  if(!packs){
+    return res.staus(404).json({
+      message:"NO Subject pack added at."
+    });
+  }
+
+    res.status(200).json({
+      success: true,
+      count: packs.length,
+      data: packs
+    });
+  }catch(error){
+    res.status(500).json({
+      success: false,
+      message: error.message
+    });
+  }
+};
+
+
+const getSingleSubjectPackForAdmin = async(req,res) =>{
+
+  try{
+
+    const subjectPackId = req.params.id;
+
+    if(!isValidObjectId(subjectPackId)){
+      return res.status(400).json({
+        success: false,
+        message: "Invalid Subject Pack Id",
+      })
+    };
+    const pack = await SubjectPack.findById(subjectPackId);
+
+    if(!pack ){
+      return res.status(404).json({
+        success: false,
+        message: "Subject pack not found"
+      });
+    }
+
+
+
+    res.status(200).json({
+      success: true,
+      data: pack,
+    });
+  }catch(error){
+
+    res.status(500).json({
+      success: false,
+      message: error.message
+    });
+  }
+};
+
 
 const addPaperToPack = async(req,res)=>{
   try{
@@ -446,5 +507,7 @@ module.exports = {
   addPaperToPack,
   deletePaperFromPack,
   updateSubjectPack,
-  deleteSubjectPack
+  deleteSubjectPack,
+  getAllSubjectPacksforAdmin,
+  getSingleSubjectPackForAdmin
 };

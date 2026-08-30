@@ -1,6 +1,5 @@
 
 import { useState,useEffect } from "react";
-import {getAllSubjectPacks} from "../../sevices/subjectService";
 import SkeletonCard from "../../components/ui/SkeletonCard";
 import ErrorState from "../../components/ui/ErrorState";
 import EmptyState from "../../components/ui/EmptyState";
@@ -8,6 +7,7 @@ import PackCard from "../components/PackCard";
 import SearchInput from "../../components/SearchInput";
 import { Plus, PlusCircle } from "lucide-react";
 import { Link } from "react-router-dom";
+import { AdmingetAllSubjectPacks } from "../services/adminServices";
 
 const SubjectPacks = ()=>{
   const [packs, setPacks] = useState([]);
@@ -20,7 +20,7 @@ const SubjectPacks = ()=>{
     
       setLoading(true);
       setError("");
-      const response = await getAllSubjectPacks();
+      const response = await AdmingetAllSubjectPacks();
       console.log(response);
       setPacks(response.data || []);
       setLoading(false);
