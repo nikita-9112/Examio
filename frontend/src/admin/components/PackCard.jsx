@@ -4,10 +4,16 @@ import { ArrowRight, BookOpen, Building2, DotSquare, FileText, MenuIcon, MenuSqu
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const PackCard = ({pack})=>{
+const PackCard = ({
+  pack,
+  handleToggleStatus,
+  toggleingPackId,
+})=>{
 
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
+
+  const isToggling = toggleingPackId === pack._id;
 
   const handleManagePapers = () =>{
     setMenuOpen(false);
@@ -22,7 +28,7 @@ const PackCard = ({pack})=>{
 
   const handleToggleActive = () =>{
     setMenuOpen(false);
-    console.log("Toggle active status: ", pack._id);
+    handleToggleStatus(pack);
   };
 
   const handleDelete = () =>{
@@ -75,9 +81,19 @@ const PackCard = ({pack})=>{
                    </button>
 
                   {/* Active /inactive */}
-                  <button type="button" onClick={handleToggleActive} className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 tansition">
-                    <Power size={17}/>
-                    {pack.isActive? "Deactivate Pack": "Activate Pack"}
+                  <button
+                    type="button"
+                    onClick={handleToggleActive}
+                    disabled={isToggling}
+                    className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 transition disabled:opacity-50"
+                  >
+                    <Power size={17} />
+
+                    {isToggling
+                      ? "Updating..."
+                      : pack.isActive
+                        ? "Deactivate Pack"
+                        : "Activate Pack"}
                   </button>
 
                   {/* Divider */}

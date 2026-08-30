@@ -8,11 +8,14 @@ import SearchInput from "../../components/SearchInput";
 import { Plus, PlusCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 import { AdmingetAllSubjectPacks } from "../services/adminServices";
+import { getToken } from "../../utils/auth";
+import api from "../../sevices/api";
 
 const SubjectPacks = ()=>{
   const [packs, setPacks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [toggleingPackId, setTogglingPackId] = useState(null);
 
   const fetchSubjectPacks = async() =>{
 
@@ -31,6 +34,54 @@ const SubjectPacks = ()=>{
       setError(error);
     }
   }
+
+  
+  const handleToggleStatus = async (pack) => {
+    try {
+
+      setTogglingPackId(pack._id);
+
+      const token = getToken();
+  
+      const response = await api.put(
+        `/subject-packs/${pack._id}`,
+        {
+          isActive: !pack.isActive,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+  
+      const data = response.data;
+  
+      if (!data.success) {
+        throw new Error(
+          data.message || "Failed to update subject pack status"
+        );
+      }
+  
+      // Update UI immediately
+      setPacks((prevPacks) =>
+        prevPacks.map((item) =>
+          item._id === pack._id
+            ? data.data
+            : item
+        )
+      );
+  
+    } catch (error) {
+      console.error(
+        "Failed to toggle subject pack status:",
+        error
+      );
+    }finally{
+      setTogglingPackId(null);
+    }
+  };
+
 
   useEffect(()=>{
     fetchSubjectPacks();
@@ -83,7 +134,7 @@ const SubjectPacks = ()=>{
         {packs.map((pack) =>(
          
      
-          <PackCard  key={pack._id} pack={pack}/>
+          <PackCard  key={pack._id} pack={pack} handleToggleStatus={handleToggleStatus} toggleingPackId={toggleingPackId}/>
     
         ))}
       </div>
