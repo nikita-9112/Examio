@@ -1,5 +1,5 @@
 import { BookOpen, FileText, ShoppingBag } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import OverviewCard from "../components/OverviewCard";
 import PackCard from "../components/PackCard";
 import { useEffect, useState } from "react";
@@ -10,6 +10,7 @@ import EmptyState from "../../components/ui/EmptyState";
 
 const Dashboard = () =>{
 
+  const navigate = useNavigate();
   const [packs, setPacks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -99,9 +100,9 @@ const Dashboard = () =>{
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {DisplayedPack.map((pack) =>(
          
-     
+         <div onClick={() => navigate( `/admin/subject-packs/${pack._id}`)}>
           <PackCard  key={pack._id} pack={pack}/>
-    
+          </div>
         ))}
       </div>
       }

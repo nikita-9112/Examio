@@ -1,24 +1,25 @@
 
 
-import { ArrowRight, BookOpen, Building2, DotSquare, FileText, MenuIcon, MenuSquare, MoreVertical, Pencil, Power, Trash2 } from "lucide-react";
+import { ArrowRight, BookOpen, Building2, DotSquare, FileText, MenuIcon, MenuSquare, MoreVertical, Pencil, Power, Trash2,PlusCircle } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const PackCard = ({
   pack,
-  handleToggleStatus,
-  toggleingPackId,
-  handleDeletePack,
+  onToggleStatus,
+  onDelete,
+  onAddPaper,
+  isToggling,
 })=>{
 
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
 
-  const isToggling = toggleingPackId === pack._id;
+ 
 
-  const handleManagePapers = () =>{
+  const handleAddPaper = () => {
     setMenuOpen(false);
-    navigate(`/admin/subject-packs/${pack._id}`);
+    onAddPaper?.(pack);
   };
 
   const handleEdit = () =>{
@@ -29,12 +30,12 @@ const PackCard = ({
 
   const handleToggleActive = () =>{
     setMenuOpen(false);
-    handleToggleStatus(pack);
+    onToggleStatus?.(pack);
   };
 
   const handleDelete = () =>{
     setMenuOpen(false);
-    handleDeletePack(pack);
+    onDelete?.(pack);
   }
 
   return(
@@ -61,19 +62,34 @@ const PackCard = ({
         </div>
           </div >
 
-            <div className="absolute right-0 top-0">
-              <button type="button" onClick={() => setMenuOpen((prev) => !prev)}
-              className="p-2 rounded-lg text-gray-500 hover:bg-gray-100 hover:text-gray-800 transition" aria-label="Subject Pack actions">
+
+          { onToggleStatus && 
+          
+          <div className="absolute right-0 top-0">
+              <button type="button"
+               onClick={(e) =>{
+                e.stopPropagation();
+                setMenuOpen((prev) => !prev)
+              }
+              }
+              className="p-2 rounded-lg text-gray-500 hover:bg-gray-100 hover:text-gray-800 transition"
+               aria-label="Subject Pack actions">
                 <MoreVertical  className="w-5 h-5"/>
               </button>
 
               {menuOpen && (
-                <div className="absolute right-0 top-10 z-20 w-52 bg-white border border-slate-200 rounded-xl shadow-lg py-2">
+                <div 
+                onClick={(e) => e.stopPropagation()}
+                className="absolute right-0 top-10 z-20 w-52 bg-white border border-slate-200 rounded-xl shadow-lg py-2">
                   {/* mangae Papers */}
-                  <button type="button" onClick={handleManagePapers} className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 tansition">
-                    <FileText size={17} />
-                    Manage Papers
-                  </button>
+                  <button
+                      type="button"
+                      onClick={handleAddPaper}
+                      className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 transition"
+                    >
+                      <PlusCircle size={17} />
+                      Add Paper
+                    </button>
                    
                    {/* edit */}
                    <button type="button" onClick={handleEdit} className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 tansition">
@@ -94,7 +110,8 @@ const PackCard = ({
                       ? "Updating..."
                       : pack.isActive
                         ? "Deactivate Pack"
-                        : "Activate Pack"}
+                        : "Activate Pack"
+                    }
                   </button>
 
                   {/* Divider */}
@@ -112,7 +129,8 @@ const PackCard = ({
 
                 </div>
               )}
-            </div>
+            </div>}
+            
             {/* <span className=" inline-block rounded-full  px-2 py-1 text-xs font-bold text-green-600 absolute right-0 ">
              <MoreVertical className="w-5 h-5 text-gray-500 hover:text-gray-700"/>
             </span> */}
