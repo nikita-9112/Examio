@@ -47,12 +47,6 @@ return (
    {/* hero section */}
     <HeroSection/>
 
-    {/* search papers */}
-    <section className="px-6 pb-12 mt-12 mx-auto">
-      <SearchInput/>
-     
-    </section>
-
     {/* feature card */}
     <section className="px-6 py-16">
       

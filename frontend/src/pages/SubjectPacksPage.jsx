@@ -6,12 +6,17 @@ import EmptyState from "../components/ui/EmptyState";
 import ErrorState from "../components/ui/ErrorState";
 
 import { getAllSubjectPacks } from "../sevices/subjectService";
+import SearchInput from "../components/SearchInput";
+import SubjectPackFilters from "../components/ui/SubjectPackFilters";
 
 const SubjectPacksPage = () => {
 
 const [subjectPacks, setSubjectPacks] = useState([]);
 const [loading, setLoading] = useState(true);
 const [error, setError] = useState(false);
+
+
+const [search, setSearch] = useState("");
 
 const fetchSubjectPacks = async () => {
 
@@ -46,12 +51,23 @@ try {
 };
 
 useEffect(() => {
-
-
 fetchSubjectPacks();
-
-
 }, []);
+
+
+const filteredPacks = subjectPacks.filter((pack) => {
+  const searchTerm = search.toLowerCase().trim();
+
+  if (!searchTerm) return true;
+
+  return (
+    pack.subjectName?.toLowerCase().includes(searchTerm) ||
+    pack.subjectCode?.toLowerCase().includes(searchTerm) ||
+    pack.university?.toLowerCase().includes(searchTerm) ||
+    pack.course?.toLowerCase().includes(searchTerm) ||
+    pack.branch?.toLowerCase().includes(searchTerm)
+  );
+});
 
 return (
 
@@ -74,72 +90,63 @@ return (
 
   </section>
 
+  {/* search input */}
+
+  <section className="mb-8">
+  <SearchInput
+    value={search}
+    onChange={setSearch}
+    placeholder="Search by subject, code, university..."
+  />
+</section>
+
+
 
   {/* Results Count */}
 
   {!loading && !error && subjectPacks.length > 0 && (
-
-    <div className="mb-6">
-
-      <p className="text-sm font-medium text-slate-500">
-
-        {subjectPacks.length}{" "}
-        {subjectPacks.length === 1
-          ? "subject pack"
-          : "subject packs"}{" "}
-        available
-
-      </p>
-
-    </div>
-
-  )}
+  <div className="mb-6">
+    <p className="text-sm font-medium text-slate-500">
+      {filteredPacks.length}{" "}
+      {filteredPacks.length === 1
+        ? "subject pack"
+        : "subject packs"}{" "}
+      found
+    </p>
+  </div>
+)}
 
 
   {/* Loading */}
 
   {loading ? (
-
-    <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-
-      {[1, 2, 3, 4, 5, 6].map((item) => (
-
-        <SkeletonCard key={item} />
-
-      ))}
-
-    </div>
-
-
-  ) : error ? (
-
-    <ErrorState />
-
-
-  ) : subjectPacks.length === 0 ? (
-
-    <EmptyState
-      title="No Subject Packs Found"
-      description="New solved PYQs will be added soon. Please check back later."
-    />
-
-
-  ) : (
-
-    <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-
-      {subjectPacks.map((pack) => (
-
-        <SubjectPackCard
-          key={pack._id}
-          pack={pack}
-        />
-
-      ))}
-
-    </div>
-
-  )}
+  <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+    {[1, 2, 3, 4, 5, 6].map((item) => (
+      <SkeletonCard key={item} />
+    ))}
+  </div>
+) : error ? (
+  <ErrorState />
+) : subjectPacks.length === 0 ? (
+  <EmptyState
+    title="No Subject Packs Found"
+    description="New solved PYQs will be added soon. Please check back later."
+  />
+) : filteredPacks.length === 0 ? (
+  <EmptyState
+    title="No Matching Subject Packs"
+    description="Try searching with a different subject name, code, university, course, or branch."
+  />
+) : (
+  <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+    {filteredPacks.map((pack) => (
+      <SubjectPackCard
+        key={pack._id}
+        pack={pack}
+      />
+    ))}
+  </div>
+)}
 
 </main>
 
