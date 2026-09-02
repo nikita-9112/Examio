@@ -1,6 +1,6 @@
 const express = require("express");
 const protect = require("../middleware/authMiddleware");
-const { createPurchase, markPurchaseCompleted, markPurchaseFailed, getMyPurchases, checkPurchaseAccess, getFullPaper } = require("../controllers/purchaseController");
+const { createPurchase, markPurchaseCompleted, markPurchaseFailed, getMyPurchases, checkPurchaseAccess, getFullPaper, getProtectedPaper } = require("../controllers/purchaseController");
 const hasPackAccess = require("../middleware/hasPackAccess");
 const router = express.Router();
 
@@ -11,6 +11,7 @@ router.put("/failed",protect, markPurchaseFailed);
 router.get("/my-purchases",protect, getMyPurchases);
 router.get("/access/:subjectPackId",protect,checkPurchaseAccess);
 router.get("/full-papers/:subjectPackId", protect, hasPackAccess, getFullPaper);
+router.get("/paper/:subjectPackId/:paperId", protect,hasPackAccess, getProtectedPaper);
 
 
 // for middleware working check.

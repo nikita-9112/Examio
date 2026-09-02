@@ -62,30 +62,46 @@ const SubjectDetailsPage = ()=>{
         behavior:"smooth",
         block: "start",
       });
-      console.log("hii")
+      
       return;
 
     }
    
-    const res = await purchaseService.getFullPapers(id);
+    try{
 
-    const selectedPaper = res.papers.find((paper)=> paper._id === paperId);
+      const res = await purchaseService.getProtectedPaper(id, paperId);
+
  
-    if(!selectedPaper){
-      console.error("Paper not found");
-      return;
+    const pdfBlob = new Blob(
+      [res.data],
+      {
+        type:"application/pdf",
+      }
+    );
+
+    const pdfUrl = URL.createObjectURL(pdfBlob);
+
+ 
+    // Open PDF
+    window.open(pdfUrl, "_blank");
+
+    // release memory later
+    setTimeout(() =>{
+      URL.revokeObjectURL(pdfUrl);
+    }, 1000 * 60);
+
+    }catch(error){
+      console.error(
+        "Error opening paper:",
+        error
+      );
+  
+      alert(
+        "Unable to open this paper. Please try again."
+      );
     }
-    if(!selectedPaper.pdfUrl){
-      console.error("pdf url not found!!");
-      return;
-    }
-
-
-     // const demoPdfUrl = subjectPack?.demoPdfUrl || "";
-     const newPdf = selectedPaper?.pdfUrl?
-     `${import.meta.env.VITE_API_URL}/public/${selectedPaper.pdfUrl}` : null;
-
-    window.open(newPdf, "_blank");
+    
+    
   }
 
   useEffect(()=>{

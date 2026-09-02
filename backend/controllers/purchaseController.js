@@ -2,7 +2,7 @@
 const SubjectPack = require("../models/SubjectPack");
 const Purchase = require("../models/PurchaseModel");
 const isValidObjectId = require("../utils/isValidObjectId");
-
+const axios = require("axios");
 
 const createPurchase = async(req,res) =>{
 
@@ -317,7 +317,6 @@ const getFullPaper = async(req,res)=>{
           year: paper.examYear,
           examType: paper.examType,
           fileName:paper.fileName,
-          pdfUrl: paper.pdfUrl,
         })
       )
     });
@@ -334,13 +333,80 @@ const getFullPaper = async(req,res)=>{
   }
 };
 
+
+
+const getProtectedPaper = async (req, res) => {
+  try {
+    const { subjectPackId, paperId } = req.params;
+
+    // 1. Validate IDs
+    if (
+      !isValidObjectId(subjectPackId) ||
+      !isValidObjectId(paperId)
+    ) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid subject pack or paper ID",
+      });
+    }
+
+    // 2. Find subject pack
+    const subjectPack = await SubjectPack.findById(subjectPackId);
+
+    if (!subjectPack) {
+      return res.status(404).json({
+        success: false,
+        message: "Subject Pack not found",
+      });
+    }
+
+    // 3. Find requested paper
+    const paper = subjectPack.papers.id(paperId);
+
+    if (!paper) {
+      return res.status(404).json({
+        success: false,
+        message: "Paper not found",
+      });
+    }
+
+    // 4. Fetch PDF from Cloudinary
+    const response = await axios.get(paper.pdfUrl, {
+      responseType: "stream",
+    });
+
+    // 5. Tell browser that this is a PDF
+    res.setHeader("Content-Type", "application/pdf");
+
+    // 6. Prevent browser from caching it
+    res.setHeader(
+      "Cache-Control",
+      "private, no-store, no-cache, must-revalidate"
+    );
+
+    // 7. Stream Cloudinary response to browser
+    response.data.pipe(res);
+
+  } catch (error) {
+    console.error("Error while opening protected paper:", error);
+
+    if (!res.headersSent) {
+      return res.status(500).json({
+        success: false,
+        message: "Unable to open paper",
+      });
+    }
+  }
+};
+
 module.exports = {
   createPurchase,
   markPurchaseCompleted,
   markPurchaseFailed,
   getMyPurchases,
   checkPurchaseAccess,
-  getFullPaper
+  getFullPaper,
+  getProtectedPaper,
   
 };
 

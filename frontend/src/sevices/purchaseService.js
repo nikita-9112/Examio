@@ -24,11 +24,24 @@ export const purchaseService = {
       throw error;
     }
   },
+
+  getProtectedPaper: async (subjectPackId, paperId) => {
+
+    const response = await api.get(
+      `v1/purchase/paper/${subjectPackId}/${paperId}`,
+      {
+        responseType: "blob",
+      }
+    );
+
+    return response;
+  },
   
   getMyPurchases : async() =>{
     const response = await api.get("v1/purchase/my-purchases");
     return response.data;
-  }
+  },
+
 
 };
 
