@@ -1,195 +1,104 @@
-
 import LibraryCard from "./LibraryCard";
-import purchaseService from "../../../sevices/purchaseService";
-import { BookOpen } from "lucide-react";
+
 import EmptyState from "../../ui/EmptyState";
 import ErrorState from "../../ui/ErrorState";
 import SkeletonCard from "../../ui/SkeletonCard";
 
+const MyLibrary = ({
+loading,
+error,
+library,
+onRetry,
+}) => {
 
-const library = [
-  {
-    _id :1,
-  university:"RGPV",
-  course: "Btech",
-  branch: "CSE",
-  semester: 4,
-  subjectName:"Ada",
-  subjectCode: "CS-401",
-  price:30,
-  demoPdfUrl:"demo",
+return (
 
-  papers: [
-    {
-    _id: "p11",
-    examYear: 2024,
-    examType:"june",
-    fileName:"ada-june",
-    uploadedAt: 2026,
-  },
-    {
-    _id: "p21",
-    examYear: 2024,
-    examType:"june",
-    fileName:"ada-june",
-    uploadedAt: 2026,
-  },
-    {
-    _id: "p31",
-    examYear: 2024,
-    examType:"june",
-    fileName:"ada-june",
-    uploadedAt: 2026,
-  },
-]
-    
-  },
-  {
-    _id :2,
-  university:"RGPV",
-  course: "Btech",
-  branch: "CSE",
-  semester: 4,
-  subjectName:"Ada",
-  subjectCode: "CS-401",
-  price:30,
-  demoPdfUrl:"demo",
 
-  papers: [
-    {
-    _id: "p12",
-    examYear: 2024,
-    examType:"june",
-    fileName:"ada-june",
-    uploadedAt: 2026,
-  },
-    {
-    _id: "p22",
-    examYear: 2024,
-    examType:"june",
-    fileName:"ada-june",
-    uploadedAt: 2026,
-  },
-    {
-    _id: "p32",
-    examYear: 2024,
-    examType:"june",
-    fileName:"ada-june",
-    uploadedAt: 2026,
-  },
-]
-    
-  },
-  {
-    _id :3,
-  university:"RGPV",
-  course: "Btech",
-  branch: "CSE",
-  semester: 4,
-  subjectName:"Ada",
-  subjectCode: "CS-401",
-  price:30,
-  demoPdfUrl:"demo",
+<section id="mylibrary">
 
-  papers: [
-    {
-    _id: "p13",
-    examYear: 2024,
-    examType:"june",
-    fileName:"ada-june",
-    uploadedAt: 2026,
-  },
-    {
-    _id: "p23",
-    examYear: 2024,
-    examType:"june",
-    fileName:"ada-june",
-    uploadedAt: 2026,
-  },
-    {
-    _id: "p33",
-    examYear: 2024,
-    examType:"june",
-    fileName:"ada-june",
-    uploadedAt: 2026,
-  },
-]
-    
-  },
-  {
-    _id :4,
-  university:"RGPV",
-  course: "Btech",
-  branch: "CSE",
-  semester: 4,
-  subjectName:"Ada",
-  subjectCode: "CS-401",
-  price:30,
-  demoPdfUrl:"demo",
+  {/* Section Header */}
 
-  papers: [
-    {
-    _id: "p14",
-    examYear: 2024,
-    examType:"june",
-    fileName:"ada-june",
-    uploadedAt: 2026,
-  },
-    {
-    _id: "p24",
-    examYear: 2024,
-    examType:"june",
-    fileName:"ada-june",
-    uploadedAt: 2026,
-  },
-    {
-    _id: "p34",
-    examYear: 2024,
-    examType:"june",
-    fileName:"ada-june",
-    uploadedAt: 2026,
-  },
-]
+  <div className="mb-6 flex items-end justify-between gap-4">
 
-  },
-]
-const MyLibrary = ({loading, error, library})=>{
+    <div>
 
- 
-
-  return(
-    <section className="px-6 py-16 ">
-   <h2 className="mb-10 text-center text-3xl font-bold">
+      <h2 className="text-xl font-bold text-slate-900 sm:text-2xl">
         My Library
-    </h2>
- 
-{loading ? (
-  <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
-   
-    {[1,2].map((item)=>(
-      <div>
-        <SkeletonCard key={item}/>
-        </div>
-    ))}
+      </h2>
+
+      <p className="mt-1 text-sm text-slate-500">
+        Access all the subject packs you have purchased.
+      </p>
+
     </div>
 
-) : error ? (
-     <ErrorState/>
-): library.length === 0 ? (
-  <EmptyState  title={"You haven't purchased any subject packs yet"} description={"Purchase a subject pack to access solved PYQs"}/>
-):(
-  <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-  {library.map((pack)=>(
-    <LibraryCard 
-    key={pack._id}
-    pack={pack}
-    />
-  ))}
-</div>
-)}
-</section>
-  )
-}
+    {library.length > 0 && (
 
+      <span className="rounded-full bg-blue-50 px-3 py-1 text-sm font-medium text-blue-600">
+
+        {library.length}{" "}
+        {library.length === 1 ? "Pack" : "Packs"}
+
+      </span>
+
+    )}
+
+  </div>
+
+
+  {/* Loading */}
+
+  {loading ? (
+
+    <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+
+      {[1, 2, 3].map((item) => (
+
+        <SkeletonCard key={item} />
+
+      ))}
+
+    </div>
+
+
+  ) : error ? (
+
+    <ErrorState
+      message={error}
+      onRetry={onRetry}
+    />
+
+
+  ) : library.length === 0 ? (
+
+    <EmptyState
+      title="Your library is empty"
+      description="Purchase a subject pack to access solved previous year question papers."
+    />
+
+
+  ) : (
+
+    <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+
+      {library.map((purchase) => (
+
+        <LibraryCard
+          key={purchase._id}
+          pack={purchase}
+        />
+
+      ))}
+
+    </div>
+
+  )}
+
+</section>
+
+
+);
+
+};
 
 export default MyLibrary;

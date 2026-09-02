@@ -1,75 +1,431 @@
-import Card from "../../ui/Card";
-import { ArrowRight, BookOpen, Building2, FileText } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
-const LibraryCard = ({pack})=>{
+import {
+ArrowRight,
+BookOpen,
+Building2,
+CalendarDays,
+CheckCircle2,
+FileText,
+Clock,
+} from "lucide-react";
 
+const LibraryCard = ({ pack }) => {
 
-  return(
-    <div className=" p-6 bg-gradient-to-r from-blue-100 via-white to-purple-100 shadow-sm border border-slate-200 rounded-2xl  shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-pointer ">
-          <div className="flex flex-col items-center items-start relative justify-between ">
-            <div className="flex items-center mt-8">
-            <div className="flex h-0 w-0  md:h-16 md:w-16 items-center justify-center rounded-xl bg-white border border-blue-100 shadow-md shadow-blue-200 hover:shadow-xl shadow-purple-200 transition-all duration-300 mr-5 ">
-          <BookOpen size={32}  className="text-purple-600 font-bold "/>
-          
-        </div>
-        <div className="flex-1 text-center ">
-          <div className="flex items-center">
-            <h1 className="text-3xl font-bold text-slate-900 mr-1">
-              {pack.subjectPack.subjectName}
-            </h1>
-             <span className=" inline-block rounded-full bg-purple-600 px-2 py-1 text-xs font-semibold text-white">
-               {pack.subjectPack.subjectCode}
-            </span>
-          </div>
-         
-            <div className=" flex flex-wrap items-center gap-3 text-slate-700 font-semibold">
-              <span>• Semester {pack.subjectPack.semester}</span>
-              <span>• {pack.subjectPack.course}</span>
-              <span>• {pack.subjectPack.branch}</span>
-           </div>
+const navigate = useNavigate();
 
+const subjectPack = pack?.subjectPack;
 
-        </div>
+const papersCount = subjectPack?.papers?.length || 0;
 
-           
-          </div >
-            <span className=" inline-block rounded-full border border-green-500 bg-green-100 px-2 py-1 text-xs font-bold text-green-600 absolute right-0 ">
-               Access till 
-               23 jan 2027
-            </span>
+// Null expiry means lifetime access
+const isActive =
+!pack?.expiresAt ||
+new Date(pack.expiresAt) > new Date();
 
-          </div>
-
-          
-
-          <p className="mt-3 text-slate-700 flex  items-center font-medium">
-          <Building2 size={18} className="text-purple-600 mr-2"/>
-            {pack.subjectPack.university}
-          </p>
-
-          <div className="mt-4 flex items-center justify-between">
-
-            {/* left side */}
-            <div className=" flex items-center gap-2">
-              <FileText size={16} className="text-blue-600"/>
-              <span className="text-sm font-medium text-slate-700">{pack.papers?.length} Sloved PYQs</span>
-            </div>
-
-            {/* right side */}
-
-            <div className="mt-5 flex justify-between items-center hover:-translate-x-1 transition-all duration-300 pointer-cursor hover:bg-indigo-50">
-                  <span className="text-green-700 font-medium">
-                    Active
-                  </span>
-                  <ArrowRight className="text-indigo-600"/>
-                </div>
-
-          </div>
-
-
-        </div> 
-  )
-
+const formattedExpiry = pack?.expiresAt
+? new Date(pack.expiresAt).toLocaleDateString(
+"en-IN",
+{
+day: "numeric",
+month: "short",
+year: "numeric",
 }
+)
+: "Lifetime Access";
+
+const handleOpenPack = () => {
+
+
+if (!subjectPack?._id) return;
+
+navigate(`/subject/${subjectPack._id}`);
+
+
+};
+
+return (
+
+
+<article
+  onClick={handleOpenPack}
+  className="
+    group
+    relative
+    cursor-pointer
+    overflow-hidden
+    rounded-2xl
+    border
+    border-slate-200
+    bg-white
+    p-5
+    shadow-sm
+    transition-all
+    duration-300
+    hover:-translate-y-1
+    hover:border-blue-200
+    hover:shadow-lg
+  "
+>
+
+  {/* Top accent */}
+
+  <div
+    className="
+      absolute
+      inset-x-0
+      top-0
+      h-1
+      bg-gradient-to-r
+      from-blue-500
+      via-indigo-500
+      to-violet-500
+    "
+  />
+
+
+  {/* Header */}
+
+  <div className="flex items-start justify-between gap-3">
+
+    <div className="flex min-w-0 items-center gap-3">
+
+      {/* Icon */}
+
+      <div
+        className="
+          flex
+          h-12
+          w-12
+          shrink-0
+          items-center
+          justify-center
+          rounded-xl
+          bg-blue-50
+          text-blue-600
+        "
+      >
+        <BookOpen size={24} />
+      </div>
+
+
+      {/* Subject */}
+
+      <div className="min-w-0">
+
+        <h3
+          className="
+            truncate
+            text-lg
+            font-bold
+            text-slate-900
+            sm:text-xl
+          "
+          title={subjectPack?.subjectName}
+        >
+          {subjectPack?.subjectName || "Subject Pack"}
+        </h3>
+
+
+        <span
+          className="
+            mt-1
+            inline-flex
+            rounded-full
+            bg-violet-50
+            px-2.5
+            py-1
+            text-xs
+            font-semibold
+            text-violet-700
+          "
+        >
+          {subjectPack?.subjectCode || "N/A"}
+        </span>
+
+      </div>
+
+    </div>
+
+
+    {/* Access Status */}
+
+    <div
+      className={`
+        shrink-0
+        rounded-full
+        px-2.5
+        py-1
+        text-xs
+        font-semibold
+
+        ${
+          isActive
+            ? "bg-emerald-50 text-emerald-700"
+            : "bg-red-50 text-red-600"
+        }
+      `}
+    >
+
+      {isActive ? "Active" : "Expired"}
+
+    </div>
+
+  </div>
+
+
+  {/* Course Information */}
+
+  <div
+    className="
+      mt-5
+      flex
+      flex-wrap
+      gap-2
+    "
+  >
+
+    <span
+      className="
+        rounded-lg
+        bg-slate-50
+        px-3
+        py-1.5
+        text-xs
+        font-medium
+        text-slate-600
+      "
+    >
+      Semester {subjectPack?.semester}
+    </span>
+
+
+    <span
+      className="
+        rounded-lg
+        bg-slate-50
+        px-3
+        py-1.5
+        text-xs
+        font-medium
+        text-slate-600
+      "
+    >
+      {subjectPack?.course}
+    </span>
+
+
+    <span
+      className="
+        rounded-lg
+        bg-slate-50
+        px-3
+        py-1.5
+        text-xs
+        font-medium
+        text-slate-600
+      "
+    >
+      {subjectPack?.branch}
+    </span>
+
+  </div>
+
+
+  {/* University */}
+
+  <div
+    className="
+      mt-4
+      flex
+      items-center
+      gap-2
+      text-sm
+      text-slate-600
+    "
+  >
+
+    <Building2
+      size={17}
+      className="shrink-0 text-violet-600"
+    />
+
+    <span className="truncate">
+      {subjectPack?.university || "University"}
+    </span>
+
+  </div>
+
+
+  {/* Divider */}
+
+  <div className="my-5 h-px bg-slate-100" />
+
+
+  {/* Stats */}
+
+  <div
+    className="
+      grid
+      grid-cols-2
+      gap-3
+    "
+  >
+
+    {/* Papers */}
+
+    <div
+      className="
+        rounded-xl
+        bg-blue-50
+        p-3
+      "
+    >
+
+      <div className="flex items-center gap-2">
+
+        <FileText
+          size={17}
+          className="text-blue-600"
+        />
+
+        <span className="text-xs text-slate-500">
+          Papers
+        </span>
+
+      </div>
+
+
+      <p
+        className="
+          mt-2
+          text-lg
+          font-bold
+          text-slate-900
+        "
+      >
+        {papersCount}
+      </p>
+
+    </div>
+
+
+    {/* Access */}
+
+    <div
+      className={`
+        rounded-xl
+        p-3
+
+        ${
+          isActive
+            ? "bg-emerald-50"
+            : "bg-red-50"
+        }
+      `}
+    >
+
+      <div className="flex items-center gap-2">
+
+        {isActive ? (
+
+          <CheckCircle2
+            size={17}
+            className="text-emerald-600"
+          />
+
+        ) : (
+
+          <Clock
+            size={17}
+            className="text-red-500"
+          />
+
+        )}
+
+
+        <span className="text-xs text-slate-500">
+          Access
+        </span>
+
+      </div>
+
+
+      <p
+        className={`
+          mt-2
+          truncate
+          text-sm
+          font-bold
+
+          ${
+            isActive
+              ? "text-emerald-700"
+              : "text-red-600"
+          }
+        `}
+      >
+        {formattedExpiry}
+
+      </p>
+
+    </div>
+
+  </div>
+
+
+  {/* Open Button */}
+
+  <div
+    className="
+      mt-5
+      flex
+      items-center
+      justify-between
+      rounded-xl
+      border
+      border-blue-100
+      bg-blue-50
+      px-4
+      py-3
+      transition-all
+      duration-300
+      group-hover:border-blue-200
+      group-hover:bg-blue-100
+    "
+  >
+
+    <span
+      className="
+        text-sm
+        font-semibold
+        text-blue-700
+      "
+    >
+      {isActive
+        ? "Open Subject Pack"
+        : "Access Expired"
+      }
+    </span>
+
+
+    <ArrowRight
+      size={19}
+      className="
+        text-blue-600
+        transition-transform
+        duration-300
+        group-hover:translate-x-1
+      "
+    />
+
+  </div>
+
+</article>
+
+
+);
+
+};
 
 export default LibraryCard;
