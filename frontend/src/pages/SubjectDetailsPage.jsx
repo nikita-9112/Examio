@@ -67,40 +67,12 @@ const SubjectDetailsPage = ()=>{
 
     }
    
-    try{
-
-      const res = await purchaseService.getProtectedPaper(id, paperId);
-
- 
-    const pdfBlob = new Blob(
-      [res.data],
-      {
-        type:"application/pdf",
-      }
+    navigate(
+      `/paper/${id}/${paperId}`
     );
 
-    const pdfUrl = URL.createObjectURL(pdfBlob);
-
- 
-    // Open PDF
-    window.open(pdfUrl, "_blank");
-
-    // release memory later
-    setTimeout(() =>{
-      URL.revokeObjectURL(pdfUrl);
-    }, 1000 * 60);
-
-    }catch(error){
-      console.error(
-        "Error opening paper:",
-        error
-      );
-  
-      alert(
-        "Unable to open this paper. Please try again."
-      );
-    }
     
+
     
   }
 

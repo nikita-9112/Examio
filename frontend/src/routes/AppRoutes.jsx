@@ -10,6 +10,7 @@ import Registerpage from '../pages/RegisterPage';
 import SubjectDetailsPage from '../pages/SubjectDetailsPage';
 import NotFoundPage from '../pages/NotFoundPage';
 import ProtectedRoute from "../components/ProtectedRoute";
+import ProtectedPaperViewer from "../pages/ProtectedPaperViewer";
 
 
 const AppRoutes = () =>{
@@ -24,6 +25,10 @@ const AppRoutes = () =>{
       <Route path='/register' element={<Registerpage/>} />
       <Route path='/subject/:id' element={<SubjectDetailsPage/>} />
       <Route path='*' element={<NotFoundPage/>} />
+      <Route
+      path="/paper/:subjectPackId/:paperId"
+      element={<ProtectedPaperViewer />}
+    />
 
       <Route element={<ProtectedRoute allowedRole="student" />}>
         <Route
