@@ -18,6 +18,11 @@ const [error, setError] = useState(false);
 
 const [search, setSearch] = useState("");
 
+const [semester, setSemester] = useState("");
+const [branch, setBranch] = useState("");
+const [course, setCourse] = useState("");
+const [university, setUniversity] = useState("");
+
 const fetchSubjectPacks = async () => {
 
 
@@ -58,16 +63,72 @@ fetchSubjectPacks();
 const filteredPacks = subjectPacks.filter((pack) => {
   const searchTerm = search.toLowerCase().trim();
 
-  if (!searchTerm) return true;
-
-  return (
+  const matchesSearch =
+    !searchTerm ||
     pack.subjectName?.toLowerCase().includes(searchTerm) ||
     pack.subjectCode?.toLowerCase().includes(searchTerm) ||
     pack.university?.toLowerCase().includes(searchTerm) ||
     pack.course?.toLowerCase().includes(searchTerm) ||
-    pack.branch?.toLowerCase().includes(searchTerm)
+    pack.branch?.toLowerCase().includes(searchTerm);
+
+  const matchesSemester =
+    !semester ||
+    String(pack.semester) === String(semester);
+
+  const matchesBranch =
+    !branch ||
+    pack.branch === branch;
+
+  const matchesCourse =
+    !course ||
+    pack.course === course;
+
+  const matchesUniversity =
+    !university ||
+    pack.university === university;
+
+  return (
+    matchesSearch &&
+    matchesSemester &&
+    matchesBranch &&
+    matchesCourse &&
+    matchesUniversity
   );
 });
+
+
+const semesters = [
+  ...new Set(
+    subjectPacks
+      .map((pack) => pack.semester)
+      .filter(Boolean)
+  ),
+].sort((a, b) => a - b);
+
+const branches = [
+  ...new Set(
+    subjectPacks
+      .map((pack) => pack.branch)
+      .filter(Boolean)
+  ),
+].sort();
+
+const courses = [
+  ...new Set(
+    subjectPacks
+      .map((pack) => pack.course)
+      .filter(Boolean)
+  ),
+].sort();
+
+const universities = [
+  ...new Set(
+    subjectPacks
+      .map((pack) => pack.university)
+      .filter(Boolean)
+  ),
+].sort();
+
 
 return (
 
@@ -100,6 +161,29 @@ return (
   />
 </section>
 
+{/* filter section */}
+
+<SubjectPackFilters
+  semester={semester}
+  branch={branch}
+  course={course}
+  university={university}
+  semesters={semesters}
+  branches={branches}
+  courses={courses}
+  universities={universities}
+  onSemesterChange={setSemester}
+  onBranchChange={setBranch}
+  onCourseChange={setCourse}
+  onUniversityChange={setUniversity}
+  onClear={() => {
+    setSearch("");
+    setSemester("");
+    setBranch("");
+    setCourse("");
+    setUniversity("");
+  }}
+/>
 
 
   {/* Results Count */}
