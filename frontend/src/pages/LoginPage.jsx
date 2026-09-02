@@ -29,7 +29,16 @@ const LoginPage = () => {
       const {token, user} = response.data;
 
       saveAuth(token, user);
+
       login(user);
+
+      // Role-based redirect
+      if (user.role === "admin") {
+        navigate("/admin");
+      } else {
+        navigate("/dashboard");
+      }
+
       navigate("/dashboard");
     }catch(error){
       console.log(error.response?.data);

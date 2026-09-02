@@ -9,7 +9,7 @@ import LoginPage from '../pages/LoginPage';
 import Registerpage from '../pages/RegisterPage';
 import SubjectDetailsPage from '../pages/SubjectDetailsPage';
 import NotFoundPage from '../pages/NotFoundPage';
-
+import ProtectedRoute from "../components/ProtectedRoute";
 
 
 const AppRoutes = () =>{
@@ -25,8 +25,19 @@ const AppRoutes = () =>{
       <Route path='/subject/:id' element={<SubjectDetailsPage/>} />
       <Route path='*' element={<NotFoundPage/>} />
 
-      <Route  path="/dashboard" element={<DashboardPage/>} />
-      <Route path="/admin/*" element={<AdminRoutes />} />
+      <Route element={<ProtectedRoute allowedRole="student" />}>
+        <Route
+          path="/dashboard"
+          element={<DashboardPage />}
+        />
+      </Route>
+      
+      <Route element={<ProtectedRoute allowedRole="admin" />}>
+        <Route
+          path="/admin/*"
+          element={<AdminRoutes />}
+        />
+      </Route>
     </Route>
   
     </Routes>

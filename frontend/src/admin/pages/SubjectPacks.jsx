@@ -24,10 +24,13 @@ const SubjectPacks = ()=>{
   const [packs, setPacks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+ 
   const [isAddPaperOpen, setIsAddPaperOpen] = useState(false);
-  const [selectedPackForPaper, setSelectedPackForPaper] = useState(null);
 
-const [addingPaper, setAddingPaper] = useState(false);
+  const [selectedPackForPaper, setSelectedPackForPaper] =
+  useState(null);
+
+  const [addingPaper, setAddingPaper] = useState(false);
 
   
   const[deleting, setDeleting] = useState(false);
@@ -87,53 +90,64 @@ const [addingPaper, setAddingPaper] = useState(false);
     setIsAddPaperOpen(true);
   };
 
-const handleAddPaper = async (paperData) => {
-  try {
-    setAddingPaper(true);
-
-    // Step 1: Upload PDF to Cloudinary
-    const uploadResult = await uploadPdf(
-      paperData.file,
-      "question-papers"
-    );
-
-    // Step 2: Prepare paper data
-    const newPaper = {
-      examYear: paperData.examYear,
-      examType: paperData.examType,
-      fileName: uploadResult.fileName,
-      pdfUrl: uploadResult.url,
-      publicId: uploadResult.publicId,
-    };
-
-    // Step 3: Add paper to subject pack
-    const result = await addPaperToSubjectPack(
-      selectedPackForPaper._id,
-      newPaper
-    );
-
-    // Step 4: Update frontend immediately
-    setSelectedPackForPaper((prev) => ({
-      ...prev,
-      papers: result.data.papers,
-    }));
-
-    // Step 5: Close modal
-    setIsAddPaperOpen(false);
-
-  } catch (err) {
-    console.error("Failed to add paper:", err);
-
-    alert(
-      err.response?.data?.message ||
-      err.message ||
-      "Failed to add paper"
-    );
-  } finally {
-    setAddingPaper(false);
-  }
-};
-
+  const handleAddPaper = async (paperData) => {
+    if (!selectedPackForPaper) return;
+  
+    try {
+      setAddingPaper(true);
+  
+      // Step 1: Upload PDF
+      const uploadResult = await uploadPdf(
+        paperData.file,
+        "question-papers"
+      );
+  
+      // Step 2: Prepare paper data
+      const newPaper = {
+        examYear: paperData.examYear,
+        examType: paperData.examType,
+        fileName: uploadResult.fileName,
+        pdfUrl: uploadResult.url,
+        publicId: uploadResult.publicId,
+      };
+  
+      // Step 3: Add paper to selected pack
+      const result = await addPaperToSubjectPack(
+        selectedPackForPaper._id,
+        newPaper
+      );
+  
+      console.log("Paper added:", result);
+  
+      // Step 4: Update only that pack in UI
+      setPacks((prevPacks) =>
+        prevPacks.map((pack) =>
+          pack._id === selectedPackForPaper._id
+            ? {
+                ...pack,
+                papers: result.data.papers,
+              }
+            : pack
+        )
+      );
+  
+      // Step 5: Close modal
+      setIsAddPaperOpen(false);
+      setSelectedPackForPaper(null);
+  
+    } catch (err) {
+      console.error("Failed to add paper:", err);
+  
+      alert(
+        err.response?.data?.message ||
+        err.message ||
+        "Failed to add paper"
+      );
+  
+    } finally {
+      setAddingPaper(false);
+    }
+  };
   const handleDeleteRequest = (pack) => {
     setPackToDelete(pack);
   };
@@ -232,6 +246,7 @@ const handleAddPaper = async (paperData) => {
           onClose={() => {
             if (!addingPaper) {
               setIsAddPaperOpen(false);
+              setSelectedPackForPaper(null);
             }
           }}
           onAddPaper={handleAddPaper}
