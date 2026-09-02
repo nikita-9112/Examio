@@ -1,4 +1,6 @@
-
+const SubjectPack = require("../models/SubjectPack");
+const Purchase = require('../models/PurchaseModel');
+const Paper = require("../models/SubjectPack")
 
 const getDashboard = async (req,res)=>{
 
@@ -14,4 +16,54 @@ const getDashboard = async (req,res)=>{
   });
 }
 
-module.exports = {getDashboard};
+const getDashboardStats = async(req,res) =>{
+
+  try{
+
+   const totalSubjectPacks = await SubjectPack.countDocuments();
+  
+
+  const paperResult = await SubjectPack.aggregate([ 
+    {
+       $unwind: "$papers" 
+    },
+    { 
+      $count: "totalPapers" 
+    }
+   ]);
+
+   console.log(paperResult);
+
+   const totalPapers = paperResult.length >0 ? paperResult[0].totalPapers : 0;
+
+  //  get total purchases
+  const totalPurchases = await Purchase.countDocuments();
+
+  console.log("totalSubject packs: ", totalSubjectPacks);
+  console.log("totalPapers: ", totalPapers);
+  console.log("totalPurchases: ", totalPurchases);
+
+  res.status(200).json({
+    success: true,
+    data:{
+      totalSubjectPacks,
+      totalPapers,
+      totalPurchases
+    }
+  });
+
+  }catch(err){
+
+    console.error("Error feching dashboard statistics:", err);
+
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch dashboard statistics."
+    });
+  }
+};
+
+module.exports = {
+  getDashboard, 
+  getDashboardStats
+};

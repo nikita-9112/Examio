@@ -73,3 +73,11 @@ export const deletePaperFromSubjectPack = async (
 
   return response.data;
 };
+
+
+export const getAdminDashboardStats = async() =>{
+
+  const response = await api.get("/admin/dashboard/stats");
+  console.log(response);
+  return response.data;
+}
