@@ -1,99 +1,265 @@
-import { Link, useNavigate } from "react-router-dom";
-import { BookOpen,Building2, FileText, ArrowRight } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
-import Card from "./ui/Card";
-import Button from "./ui/Button";
+import {
+ArrowRight,
+BookOpen,
+Building2,
+FileText,
+} from "lucide-react";
 
-const SubjectPackCard = ({pack}) => {
+const SubjectPackCard = ({ pack }) => {
 
-  const navigate = useNavigate();
+const navigate = useNavigate();
+
+const handleOpen = () => {
+navigate(`/subject/${pack._id}`);
+};
 
 return (
 
-<Card className="group flex flex-col justify-between hover: -translate-y-1 transitio-all duration-300" >
-<div onClick={()=> navigate(`/subject/${pack._id}`)}>
-   
 
-    <div className="flex items-center justify-between gap-3">
-      <h3 className="text-xl font-semibold text-slate-900">
-        {pack.subjectName}
-      </h3>
-      
-      <span className="rounded-full bg-blue-100 px-3 py-1 text-xs font-semibold text-blue-700">
+<article
+  onClick={handleOpen}
+  className="
+    group
+    relative
+    flex
+    cursor-pointer
+    flex-col
+    overflow-hidden
+    rounded-2xl
+    border
+    border-slate-200
+    bg-white
+    shadow-sm
+    transition-all
+    duration-300
+    hover:-translate-y-1
+    hover:border-blue-200
+    hover:shadow-xl
+  "
+>
+
+  {/* Top gradient */}
+
+  <div
+    className="
+      h-1
+      w-full
+      bg-gradient-to-r
+      from-blue-500
+      via-indigo-500
+      to-violet-500
+    "
+  />
+
+
+  <div className="flex flex-1 flex-col p-5">
+
+
+    {/* Header */}
+
+    <div className="flex items-start justify-between gap-3">
+
+      <div
+        className="
+          flex
+          h-11
+          w-11
+          shrink-0
+          items-center
+          justify-center
+          rounded-xl
+          bg-blue-50
+          text-blue-600
+          transition
+          duration-300
+          group-hover:bg-blue-100
+        "
+      >
+
+        <BookOpen size={22} />
+
+      </div>
+
+
+      <span
+        className="
+          rounded-full
+          bg-blue-50
+          px-3
+          py-1.5
+          text-xs
+          font-bold
+          text-blue-700
+        "
+      >
         {pack.subjectCode}
       </span>
+
     </div>
-   
-   <p className="mt-2 text-sm text-slate-600">
-    Semester {pack.semester}   •  {pack.course}  •  {pack.branch}
-   </p>
 
-   <div className="mt-2 flex items-center gap-2 text-sm text-slate-500">
-    <Building2 size={16} className="text-blue-600"/>
-    <span>{pack.university}</span>
-   </div>
 
- <div className="mt-4 flex items-center justify-between">
+    {/* Subject Name */}
 
-  {/* left side */}
-  <div className=" flex items-center gap-2">
-    <FileText size={16} className="text-blue-600"/>
-    <span className="text-sm font-medium text-slate-700">{pack.papers.length} Sloved PYQs</span>
-   </div>
+    <div className="mt-5">
 
-   {/* right side */}
+      <h3
+        className="
+          line-clamp-2
+          text-xl
+          font-bold
+          leading-snug
+          text-slate-900
+          transition-colors
+          group-hover:text-blue-700
+        "
+      >
+        {pack.subjectName}
+      </h3>
 
-   <p className="text-lg font-bold text-blue-600">
-    <span className="mr-1 text-sm font-normal text-slate-500">
-      Only
-    </span>
-    ₹{pack.price}
-   </p>
 
- </div>
+      <p className="mt-2 text-sm text-slate-500">
+        Semester {pack.semester}
+        <span className="mx-2">•</span>
+        {pack.course}
+        <span className="mx-2">•</span>
+        {pack.branch}
+      </p>
 
+    </div>
+
+
+    {/* University */}
+
+    <div
+      className="
+        mt-4
+        flex
+        items-center
+        gap-2
+        text-sm
+        font-medium
+        text-slate-600
+      "
+    >
+
+      <Building2
+        size={17}
+        className="shrink-0 text-indigo-600"
+      />
+
+      <span className="truncate">
+        {pack.university}
+      </span>
+
+    </div>
+
+
+    {/* Papers */}
+
+    <div
+      className="
+        mt-5
+        flex
+        items-center
+        gap-2
+        rounded-xl
+        bg-slate-50
+        px-3
+        py-2.5
+      "
+    >
+
+      <FileText
+        size={17}
+        className="text-blue-600"
+      />
+
+      <span className="text-sm font-semibold text-slate-700">
+
+        {pack.papers?.length || 0}{" "}
+        Solved PYQs
+
+      </span>
+
+    </div>
+
+
+    {/* Bottom */}
+
+    <div className="mt-5 border-t border-slate-100 pt-5">
+
+      <div className="flex items-center justify-between gap-3">
+
+
+        {/* Price */}
+
+        <div>
+
+          <p className="text-xs font-medium text-slate-400">
+            Subject Pack
+          </p>
+
+          <div className="mt-0.5 flex items-baseline gap-1">
+
+            <span className="text-2xl font-extrabold text-slate-900">
+              ₹{pack.price}
+            </span>
+
+            <span className="text-xs font-medium text-slate-400">
+              one-time
+            </span>
+
+          </div>
+
+        </div>
+
+
+        {/* CTA */}
+
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            handleOpen();
+          }}
+          className="
+            inline-flex
+            items-center
+            gap-2
+            rounded-xl
+            bg-blue-600
+            px-4
+            py-2.5
+            text-sm
+            font-bold
+            text-white
+            shadow-sm
+            transition-all
+            duration-300
+            hover:bg-blue-700
+            hover:shadow-md
+            group-hover:gap-3
+          "
+        >
+
+          View Pack
+
+          <ArrowRight size={17} />
+
+        </button>
+
+      </div>
+
+    </div>
 
   </div>
 
-  {/* <div className="mt-6">
-   
-    <div className="mt-4 flex gap-3">
-      <Link to={`/subject`} className="flex-1">
-        <Button variant="outline" className="w-full">
-          Preview
-        </Button>
-      </Link>
-      <Button className="flex-1">
-        Buy Now
-      </Button>
-    </div>
-  </div> */}
-</Card>
+</article>
+
 
 );
+
 };
 
 export default SubjectPackCard;
-
-/*
-const sanitizedPacks = packs.map(pack =>({
-  _id : pack.id,
-  university:pack.university,
-  course: pack.course,
-  branch: pack.branch,
-  semester: pack.semester,
-  subjectName:pack.subjectName,
-  subjectCode: pack.subjectCode,
-  price:pack.price,
-  demoPdfUrl: pack.demoPdfUrl,
-
-  papers: pack.papers.map(paper =>({
-    _id: paper._id,
-    examYear: paper.examYear,
-    examType: paper.examType,
-    fileName: paper.fileName,
-    uploadedAt: paper.uploadedAt,
-  }))
-}));
-
- */

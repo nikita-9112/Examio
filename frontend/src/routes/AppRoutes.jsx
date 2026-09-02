@@ -11,6 +11,7 @@ import SubjectDetailsPage from '../pages/SubjectDetailsPage';
 import NotFoundPage from '../pages/NotFoundPage';
 import ProtectedRoute from "../components/ProtectedRoute";
 import ProtectedPaperViewer from "../pages/ProtectedPaperViewer";
+import SubjectPacksPage from "../pages/SubjectPacksPage";
 
 
 const AppRoutes = () =>{
@@ -24,6 +25,7 @@ const AppRoutes = () =>{
       <Route path='/login' element={<LoginPage/>} />
       <Route path='/register' element={<Registerpage/>} />
       <Route path='/subject/:id' element={<SubjectDetailsPage/>} />
+      <Route path="/subject-packs" element={<SubjectPacksPage />}/>
       <Route path='*' element={<NotFoundPage/>} />
       <Route
       path="/paper/:subjectPackId/:paperId"

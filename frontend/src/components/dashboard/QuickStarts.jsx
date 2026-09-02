@@ -19,7 +19,7 @@ const quickActions = [
   description:
     "Browse available subject packs and solved PYQs.",
   icon: Search,
-  action: () => navigate("/subject"),
+  action: () => navigate("/subject-packs"),
   iconBg: "bg-blue-50",
   iconColor: "text-blue-600",
 },

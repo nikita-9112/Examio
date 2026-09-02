@@ -10,6 +10,7 @@ import { getAllSubjectPacks } from "../sevices/subjectService";
 import SkeletonCard from "../components/ui/SkeletonCard";
 import EmptyState from "../components/ui/EmptyState";
 import ErrorState from "../components/ui/ErrorState";
+import { Link } from "react-router-dom";
 
 
 
@@ -73,43 +74,95 @@ return (
 
   {/* subjectpack card render */}
 
-<section px-6 py-16>
-   <h2 className="mb-10 text-center text-3xl font-bold">
-        Explore Subject Packs
-    </h2>
- 
+{/* Subject Pack Section */}
 
-  
+<section className="px-6 py-16">
+
+  <div className="mb-10 flex flex-col items-center justify-between gap-4 sm:flex-row">
+
+<div>
+  <h2 className="text-3xl font-bold text-slate-900">
+    Explore Subject Packs
+  </h2>
+
+  <p className="mt-2 text-sm text-slate-500">
+    Find solved previous year papers for your preparation.
+  </p>
+</div>
+
+{!loading && !error && subjectPacks.length > 3 && (
+  <Link
+    to="/subject-packs"
+    className="
+      inline-flex
+      items-center
+      rounded-lg
+      border
+      border-blue-200
+      px-4
+      py-2
+      text-sm
+      font-semibold
+      text-blue-600
+      transition
+      hover:bg-blue-50
+    "
+  >
+    View All
+  </Link>
+)}
+
+
+  </div>
+
 {loading ? (
-  <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-   
-    {[1,2,3,4,5,6].map((item)=>(
-      <div>
-        <SkeletonCard key={item}/>
-        </div>
-      
-    ))}
-    </div>
+
+
+<div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+
+  {[1, 2, 3].map((item) => (
+    <SkeletonCard key={item} />
+  ))}
+
+</div>
+
 
 ) : error ? (
-   
-  <ErrorState/>
 
-): subjectPacks.length === 0 ? (
-  <EmptyState title={"No Subject Packs Found"} description={"New solved PYQs will be added soon. Please check back later."}/>
 
-):(
-  <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-  {subjectPacks.map((pack)=>(
-    <SubjectPackCard 
-    key={pack._id}
-    pack={pack}
+<ErrorState />
+
+
+) : subjectPacks.length === 0 ? (
+
+
+<EmptyState
+  title="No Subject Packs Found"
+  description="New solved PYQs will be added soon. Please check back later."
+/>
+
+
+) : (
+
+
+<div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+
+  {subjectPacks.slice(0, 3).map((pack) => (
+
+    <SubjectPackCard
+      key={pack._id}
+      pack={pack}
     />
+
   ))}
+
 </div>
+
+
 )}
- 
+
 </section>
+
 
 
 {/* footer */}
