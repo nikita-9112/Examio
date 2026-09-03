@@ -1,142 +1,229 @@
-import { SlidersHorizontal } from "lucide-react";
+
+
+
+import { SlidersHorizontal, X } from "lucide-react";
 
 const SubjectPackFilters = ({
-  semester,
-  branch,
-  course,
-  university,
-  semesters,
-  branches,
-  courses,
-  universities,
-  onSemesterChange,
-  onBranchChange,
-  onCourseChange,
-  onUniversityChange,
-  onClear,
+semester,
+branch,
+course,
+university,
+semesters,
+branches,
+courses,
+universities,
+onSemesterChange,
+onBranchChange,
+onCourseChange,
+onUniversityChange,
+onClear,
 }) => {
-  const hasFilters =
-    semester ||
-    branch ||
-    course ||
-    university;
 
-  return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
+const hasFilters =
+semester ||
+branch ||
+course ||
+university;
 
-      <div className="mb-4 flex items-center justify-between gap-3">
+const selectClassName = `     w-full
+    rounded-xl
+    border
+    border-slate-200
+    bg-white
+    px-3
+    py-2.5
+    text-sm
+    font-medium
+    text-slate-600
+    outline-none
+    transition-all
+    duration-200
+    hover:border-slate-300
+    focus:border-blue-500
+    focus:ring-2
+    focus:ring-blue-100
+  `;
 
-        <div className="flex items-center gap-2">
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-50">
-            <SlidersHorizontal
-              size={18}
-              className="text-blue-600"
-            />
-          </div>
-
-          <div>
-            <h2 className="font-semibold text-slate-900">
-              Filter Subject Packs
-            </h2>
-
-            <p className="text-xs text-slate-500">
-              Narrow down your search
-            </p>
-          </div>
-        </div>
-
-        {hasFilters && (
-          <button
-            type="button"
-            onClick={onClear}
-            className="text-sm font-semibold text-blue-600 transition hover:text-blue-700"
-          >
-            Clear Filters
-          </button>
-        )}
-
-      </div>
-
-      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-
-        {/* Semester */}
-
-        <select
-          value={semester}
-          onChange={(e) => onSemesterChange(e.target.value)}
-          className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm font-medium text-slate-700 outline-none transition focus:border-blue-500 focus:bg-white"
-        >
-          <option value="">
-            All Semesters
-          </option>
-
-          {semesters.map((item) => (
-            <option key={item} value={item}>
-              Semester {item}
-            </option>
-          ))}
-        </select>
+return (
 
 
-        {/* Branch */}
+<section className="mb-8">
 
-        <select
-          value={branch}
-          onChange={(e) => onBranchChange(e.target.value)}
-          className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm font-medium text-slate-700 outline-none transition focus:border-blue-500 focus:bg-white"
-        >
-          <option value="">
-            All Branches
-          </option>
+  {/* Compact filter header */}
 
-          {branches.map((item) => (
-            <option key={item} value={item}>
-              {item}
-            </option>
-          ))}
-        </select>
+  <div className="mb-3 flex items-center justify-between">
 
+    <div className="flex items-center gap-2">
 
-        {/* Course */}
+      <SlidersHorizontal
+        size={17}
+        className="text-slate-500"
+      />
 
-        <select
-          value={course}
-          onChange={(e) => onCourseChange(e.target.value)}
-          className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm font-medium text-slate-700 outline-none transition focus:border-blue-500 focus:bg-white"
-        >
-          <option value="">
-            All Courses
-          </option>
+      <span className="text-sm font-semibold text-slate-700">
+        Filters
+      </span>
 
-          {courses.map((item) => (
-            <option key={item} value={item}>
-              {item}
-            </option>
-          ))}
-        </select>
-
-
-        {/* University */}
-
-        <select
-          value={university}
-          onChange={(e) => onUniversityChange(e.target.value)}
-          className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm font-medium text-slate-700 outline-none transition focus:border-blue-500 focus:bg-white"
-        >
-          <option value="">
-            All Universities
-          </option>
-
-          {universities.map((item) => (
-            <option key={item} value={item}>
-              {item}
-            </option>
-          ))}
-        </select>
-
-      </div>
     </div>
-  );
+
+
+    {hasFilters && (
+
+      <button
+        type="button"
+        onClick={onClear}
+        className="
+          flex
+          items-center
+          gap-1
+          rounded-lg
+          px-2
+          py-1
+          text-xs
+          font-semibold
+          text-blue-600
+          transition
+          hover:bg-blue-50
+          hover:text-blue-700
+        "
+      >
+
+        <X size={14} />
+
+        Clear
+
+      </button>
+
+    )}
+
+  </div>
+
+
+  {/* Filters */}
+
+  <div
+    className="
+      grid
+      grid-cols-2
+      gap-3
+      sm:grid-cols-2
+      md:grid-cols-4
+      lg:grid-cols-4
+    "
+  >
+
+    {/* Semester */}
+
+    <select
+      value={semester}
+      onChange={(e) => onSemesterChange(e.target.value)}
+      className={selectClassName}
+    >
+
+      <option value="">
+        Semester
+      </option>
+
+      {semesters.map((item) => (
+
+        <option
+          key={item}
+          value={item}
+        >
+          Semester {item}
+        </option>
+
+      ))}
+
+    </select>
+
+
+    {/* Branch */}
+
+    <select
+      value={branch}
+      onChange={(e) => onBranchChange(e.target.value)}
+      className={selectClassName}
+    >
+
+      <option value="">
+        Branch
+      </option>
+
+      {branches.map((item) => (
+
+        <option
+          key={item}
+          value={item}
+        >
+          {item}
+        </option>
+
+      ))}
+
+    </select>
+
+
+    {/* Course */}
+
+    <select
+      value={course}
+      onChange={(e) => onCourseChange(e.target.value)}
+      className={selectClassName}
+    >
+
+      <option value="">
+        Course
+      </option>
+
+      {courses.map((item) => (
+
+        <option
+          key={item}
+          value={item}
+        >
+          {item}
+        </option>
+
+      ))}
+
+    </select>
+
+
+    {/* University */}
+
+    <select
+      value={university}
+      onChange={(e) => onUniversityChange(e.target.value)}
+      className={selectClassName}
+    >
+
+      <option value="">
+        University
+      </option>
+
+      {universities.map((item) => (
+
+        <option
+          key={item}
+          value={item}
+        >
+          {item}
+        </option>
+
+      ))}
+
+    </select>
+
+  </div>
+
+</section>
+
+
+);
+
 };
+
+
 
 export default SubjectPackFilters;
