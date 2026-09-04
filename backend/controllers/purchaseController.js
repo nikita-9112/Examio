@@ -3,6 +3,8 @@ const SubjectPack = require("../models/SubjectPack");
 const Purchase = require("../models/PurchaseModel");
 const isValidObjectId = require("../utils/isValidObjectId");
 const axios = require("axios");
+const razorpay = require("../config/razorpay");
+const crypto = require("crypto");
 
 const createPurchase = async(req,res) =>{
 
@@ -399,6 +401,217 @@ const getProtectedPaper = async (req, res) => {
   }
 };
 
+const createRazorpayOrder = async (req, res) => {
+  try {
+    const { subjectPackId } = req.body;
+
+    // 1. Validate subject pack ID
+    if (!subjectPackId) {
+      return res.status(400).json({
+        success: false,
+        message: "Subject Pack ID is required",
+      });
+    }
+
+    if (!isValidObjectId(subjectPackId)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid Subject Pack ID",
+      });
+    }
+
+    // 2. Find subject pack
+    const subjectPack = await SubjectPack.findById(subjectPackId);
+
+    if (!subjectPack) {
+      return res.status(404).json({
+        success: false,
+        message: "Subject Pack not found",
+      });
+    }
+
+    // 3. Check whether user already has active access
+    const activePurchase = await Purchase.findOne({
+      user: req.user._id,
+      subjectPack: subjectPackId,
+      status: "completed",
+      expiresAt: {
+        $gt: new Date(),
+      },
+    });
+
+    if (activePurchase) {
+      return res.status(400).json({
+        success: false,
+        message: "You already own this subject pack",
+      });
+    }
+
+    // 4. Create Razorpay order
+    // Razorpay amount must be in paise
+    const amountInPaise = Math.round(subjectPack.price * 100);
+
+    const razorpayOrder = await razorpay.orders.create({
+      amount: amountInPaise,
+      currency: "INR",
+      receipt: `examio_${Date.now()}`,
+      notes: {
+        userId: req.user._id.toString(),
+        subjectPackId: subjectPack._id.toString(),
+      },
+    });
+
+    // 5. Create purchase record
+    const purchase = await Purchase.create({
+      user: req.user._id,
+      subjectPack: subjectPack._id,
+      amount: subjectPack.price,
+      paymentProvider: "razorpay",
+      orderId: razorpayOrder.id,
+      status: "pending",
+    });
+
+    // 6. Return safe order details to frontend
+    return res.status(201).json({
+      success: true,
+      message: "Payment order created successfully",
+
+      order: {
+        id: razorpayOrder.id,
+        amount: razorpayOrder.amount,
+        currency: razorpayOrder.currency,
+      },
+
+      purchaseId: purchase._id,
+    });
+
+  } catch (error) {
+    console.error("Error while creating Razorpay order:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Unable to create payment order",
+      error: error.message,
+    });
+  }
+};
+
+const verifyPayment = async (req, res) => {
+  try {
+    const {
+      razorpay_order_id,
+      razorpay_payment_id,
+      razorpay_signature,
+    } = req.body;
+
+    // 1. Check required payment details
+    if (
+      !razorpay_order_id ||
+      !razorpay_payment_id ||
+      !razorpay_signature
+    ) {
+      return res.status(400).json({
+        success: false,
+        message: "Payment verification details are required",
+      });
+    }
+
+    // 2. Find our pending purchase using Razorpay order ID
+    const purchase = await Purchase.findOne({
+      orderId: razorpay_order_id,
+      user: req.user._id,
+      status: "pending",
+    });
+
+    if (!purchase) {
+      return res.status(404).json({
+        success: false,
+        message: "Pending purchase not found",
+      });
+    }
+
+    // 3. Generate expected signature
+    const generatedSignature = crypto
+      .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
+      .update(
+        `${razorpay_order_id}|${razorpay_payment_id}`
+      )
+      .digest("hex");
+
+    // 4. Compare Razorpay signature with our generated signature
+    if (generatedSignature !== razorpay_signature) {
+      return res.status(400).json({
+        success: false,
+        message: "Payment signature verification failed",
+      });
+    }
+
+    // 5. Fetch payment details from Razorpay
+    const payment = await razorpay.payments.fetch(
+      razorpay_payment_id
+    );
+
+    // 6. Make sure payment belongs to the same Razorpay order
+    if (payment.order_id !== razorpay_order_id) {
+      return res.status(400).json({
+        success: false,
+        message: "Payment does not belong to this order",
+      });
+    }
+
+    // 7. Check payment amount
+    const expectedAmount = Math.round(
+      purchase.amount * 100
+    );
+
+    if (payment.amount !== expectedAmount) {
+      return res.status(400).json({
+        success: false,
+        message: "Payment amount does not match purchase amount",
+      });
+    }
+
+    // 8. Payment must be captured
+    if (payment.status !== "captured") {
+      return res.status(400).json({
+        success: false,
+        message: `Payment is not captured. Current status: ${payment.status}`,
+      });
+    }
+
+    // 9. Complete purchase
+    const expiryDate = new Date();
+
+    expiryDate.setFullYear(
+      expiryDate.getFullYear() + 1
+    );
+
+    purchase.paymentId = razorpay_payment_id;
+    purchase.status = "completed";
+    purchase.expiresAt = expiryDate;
+
+    await purchase.save();
+
+    return res.status(200).json({
+      success: true,
+      message: "Payment verified and purchase completed",
+      purchase,
+    });
+
+  } catch (error) {
+    console.error(
+      "Error while verifying payment:",
+      error
+    );
+
+    return res.status(500).json({
+      success: false,
+      message: "Unable to verify payment",
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   createPurchase,
   markPurchaseCompleted,
@@ -407,7 +620,8 @@ module.exports = {
   checkPurchaseAccess,
   getFullPaper,
   getProtectedPaper,
-  
+  createRazorpayOrder,
+  verifyPayment
 };
 
 

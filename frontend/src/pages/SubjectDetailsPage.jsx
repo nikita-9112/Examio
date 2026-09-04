@@ -11,7 +11,6 @@ import PaperSection from "../components/subject/PaperSection";
 import DemoPdfSection from "../components/subject/DemoPdfSection";
 import NavigateBack from "../components/ui/NavigateBack";
 import { isAuthenticated } from "../utils/auth";
-import purchaseService from "../sevices/purchaseService";
 
 
 
@@ -27,7 +26,7 @@ const SubjectDetailsPage = ()=>{
   const BuySectionRef = useRef(null);
   
 
-  const {hasAccess} = useSubjectAccess(id);
+  const {hasAccess, checkAccess} = useSubjectAccess(id);
   const canAccess = hasAccess;
 
 
@@ -49,6 +48,9 @@ const SubjectDetailsPage = ()=>{
   }
   }
 
+  const handlePurchaseSuccess = async () => {
+    await checkAccess();
+  };
 
 
   const handlePaperClick = async (paperId) =>{
@@ -104,7 +106,7 @@ const SubjectDetailsPage = ()=>{
 {/* buy section */}
 
     {!canAccess ? 
-        <BuySection subjectPack={subjectPack} BuySectionRef={BuySectionRef}/>
+        <BuySection subjectPack={subjectPack} BuySectionRef={BuySectionRef}  onPurchaseSuccess={handlePurchaseSuccess}/>
       :
         <div>
           <span>full access</span>

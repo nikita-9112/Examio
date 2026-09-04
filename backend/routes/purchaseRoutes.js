@@ -1,6 +1,6 @@
 const express = require("express");
 const protect = require("../middleware/authMiddleware");
-const { createPurchase, markPurchaseCompleted, markPurchaseFailed, getMyPurchases, checkPurchaseAccess, getFullPaper, getProtectedPaper } = require("../controllers/purchaseController");
+const { createPurchase, markPurchaseCompleted, markPurchaseFailed, getMyPurchases, checkPurchaseAccess, getFullPaper, getProtectedPaper, createRazorpayOrder, verifyPayment } = require("../controllers/purchaseController");
 const hasPackAccess = require("../middleware/hasPackAccess");
 const router = express.Router();
 
@@ -14,13 +14,16 @@ router.get("/full-papers/:subjectPackId", protect, hasPackAccess, getFullPaper);
 router.get("/paper/:subjectPackId/:paperId", protect,hasPackAccess, getProtectedPaper);
 
 
-// for middleware working check.
-router.get("/protected/:subjectPackId",protect, hasPackAccess, (req,res) =>{
+router.post(
+  "/create-order",
+  protect,
+  createRazorpayOrder
+);
 
-  return res.status(200).json({
-    success: true,
-    message: "Access granted",
-  });
-});
+router.post(
+  "/verify-payment",
+  protect,
+  verifyPayment
+);
 
 module.exports = router;

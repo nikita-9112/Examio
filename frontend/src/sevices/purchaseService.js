@@ -43,6 +43,43 @@ export const purchaseService = {
   },
 
 
+  createOrder: async (subjectPackId) => {
+    try {
+      const response = await api.post(
+        "v1/purchase/create-order",
+        {
+          subjectPackId,
+        }
+      );
+
+      return response.data;
+
+    } catch (error) {
+      console.error("Error creating payment order:", error);
+      throw error;
+    }
+  },
+
+  verifyPayment: async (paymentData) => {
+    try {
+      const response = await api.post(
+        "v1/purchase/verify-payment",
+        paymentData
+      );
+  
+      return response.data;
+  
+    } catch (error) {
+      console.error(
+        "Error verifying payment:",
+        error
+      );
+  
+      throw error;
+    }
+  },
+
+
 };
 
 export default purchaseService;
