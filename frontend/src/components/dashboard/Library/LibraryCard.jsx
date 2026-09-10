@@ -20,8 +20,8 @@ const papersCount = subjectPack?.papers?.length || 0;
 
 // Null expiry means lifetime access
 const isActive =
-!pack?.expiresAt ||
-new Date(pack.expiresAt) > new Date();
+  !pack?.expiresAt ||
+  new Date(pack.expiresAt) > new Date();
 
 const formattedExpiry = pack?.expiresAt
 ? new Date(pack.expiresAt).toLocaleDateString(

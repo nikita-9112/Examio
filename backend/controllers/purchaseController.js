@@ -277,6 +277,7 @@ const checkPurchaseAccess = async(req,res)=>{
     return res.status(200).json({
       success: true,
       hasAccess: !!purchase,
+      validUntil: purchase?.expiresAt || null,
     });
 
   }catch(error){
@@ -403,6 +404,7 @@ const getProtectedPaper = async (req, res) => {
 
 const createRazorpayOrder = async (req, res) => {
   try {
+    console.log("inside createRazorpayOrder");
     const { subjectPackId } = req.body;
 
     // 1. Validate subject pack ID
@@ -440,7 +442,9 @@ const createRazorpayOrder = async (req, res) => {
       },
     });
 
+    
     if (activePurchase) {
+      console.log("activate purchases: ", activePurchase);
       return res.status(400).json({
         success: false,
         message: "You already own this subject pack",

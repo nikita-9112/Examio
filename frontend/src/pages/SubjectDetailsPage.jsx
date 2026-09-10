@@ -26,7 +26,7 @@ const SubjectDetailsPage = ()=>{
   const BuySectionRef = useRef(null);
   
 
-  const {hasAccess, checkAccess} = useSubjectAccess(id);
+  const {hasAccess, checkAccess, validUntil} = useSubjectAccess(id);
   const canAccess = hasAccess;
 
 
@@ -108,11 +108,26 @@ const SubjectDetailsPage = ()=>{
     {!canAccess ? 
         <BuySection subjectPack={subjectPack} BuySectionRef={BuySectionRef}  onPurchaseSuccess={handlePurchaseSuccess}/>
       :
-        <div>
-          <span>full access</span>
-          <p>Valid until</p>
-          <p>Coming soon...</p>
-        </div>
+      <div className="rounded-2xl border border-green-200 bg-green-50 p-5">
+        <span className="text-sm font-semibold text-green-700">
+          Full Access
+        </span>
+
+        <p className="mt-2 text-sm text-slate-600">
+          You have access to all papers in this subject pack.
+        </p>
+
+        {validUntil && (
+          <p className="mt-2 text-sm font-semibold text-slate-800">
+            Valid until:{" "}
+            {new Date(validUntil).toLocaleDateString("en-IN", {
+              day: "numeric",
+              month: "long",
+              year: "numeric",
+            })}
+          </p>
+        )}
+      </div>
 }
  
   </div>

@@ -30,6 +30,7 @@ const useSubjectAccess = (SubjectPackId) =>{
       setAccessInfo(prev =>({
         ...prev,
         hasAccess: data.hasAccess,
+        validUntil: data.validUntil,
       }))
 
     }catch(error){

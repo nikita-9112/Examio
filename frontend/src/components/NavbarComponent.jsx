@@ -13,6 +13,10 @@ const Navbar = () => {
     navigate("/");
   }
 
+  const handleDashboard = () =>{
+    navigate("/dashboard");
+  }
+
 
 return (
 <header
@@ -71,14 +75,14 @@ py-3
       </Link>
 
       <Link
-        to="/papers"
+        to="/subject-packs"
         className="
           text-slate-600
           transition
           hover:text-blue-600
         "
       >
-        Papers
+        SubjectPacks
       </Link>
 
       <Link
@@ -103,7 +107,7 @@ py-3
      gap-3
    "
  >
-   <span>Hi, {user.name}</span>
+   <span onClick={handleDashboard} className="cursor-pointer">Hi, {user.name}</span>
 
      <Button size="sm" variant="secondary" onClick={handleLogout}>
        logout
