@@ -28,10 +28,19 @@ const userSchema = new mongoose.Schema(
       unique:true,
       lowercase:true
     },
-    password:{
-      type:String,
-      require:true,
+    password: {
+      type: String,
+      required: true,
     },
+    
+    resetPasswordToken: {
+      type: String,
+    },
+    
+    resetPasswordExpire: {
+      type: Date,
+    },
+
     role:{
       type: String,
       enum:["student","admin"],

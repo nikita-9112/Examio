@@ -39,7 +39,6 @@ const LoginPage = () => {
         navigate("/dashboard");
       }
 
-      navigate("/dashboard");
     }catch(error){
       console.log(error.response?.data);
     }
@@ -105,6 +104,15 @@ px-5
         value={password}
         onChange={(e) => setPassword(e.target.value)}
       />
+
+      <div className="text-right">
+        <Link
+          to="/forgot-password"
+          className="text-sm font-medium text-blue-600 hover:text-blue-700"
+        >
+          Forgot Password?
+        </Link>
+      </div>
 
       <Button
         type="submit"

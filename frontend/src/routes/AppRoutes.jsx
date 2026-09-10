@@ -12,6 +12,8 @@ import NotFoundPage from '../pages/NotFoundPage';
 import ProtectedRoute from "../components/ProtectedRoute";
 import ProtectedPaperViewer from "../pages/ProtectedPaperViewer";
 import SubjectPacksPage from "../pages/SubjectPacksPage";
+import ForgotPass from '../pages/ForgotPass';
+import ResetPassword from '../pages/ResetPassword';
 
 
 const AppRoutes = () =>{
@@ -23,6 +25,9 @@ const AppRoutes = () =>{
 
       <Route path='/' element={<HomePage/>}/>
       <Route path='/login' element={<LoginPage/>} />
+      <Route path='/forgot-password' element={<ForgotPass />} />
+      <Route path='/reset-password/:token' element={<ResetPassword />} />
+      
       <Route path='/register' element={<Registerpage/>} />
       <Route path='/subject/:id' element={<SubjectDetailsPage/>} />
       <Route path="/subject-packs" element={<SubjectPacksPage />}/>
