@@ -14,6 +14,7 @@ import ProtectedPaperViewer from "../pages/ProtectedPaperViewer";
 import SubjectPacksPage from "../pages/SubjectPacksPage";
 import ForgotPass from '../pages/ForgotPass';
 import ResetPassword from '../pages/ResetPassword';
+import About from "../pages/About";
 
 
 const AppRoutes = () =>{
@@ -31,6 +32,7 @@ const AppRoutes = () =>{
       <Route path='/register' element={<Registerpage/>} />
       <Route path='/subject/:id' element={<SubjectDetailsPage/>} />
       <Route path="/subject-packs" element={<SubjectPacksPage />}/>
+      <Route path="/about" element={<About />}/>
       <Route path='*' element={<NotFoundPage/>} />
       <Route
       path="/paper/:subjectPackId/:paperId"
