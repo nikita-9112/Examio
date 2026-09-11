@@ -3,6 +3,11 @@ const bcrypt = require("bcryptjs");
 const crypto = require("crypto");
 const generateToken = require("../utils/generateToken");
 const sendEmail = require("../utils/sendEmail");
+const { OAuth2Client } = require("google-auth-library");
+
+const googleClient = new OAuth2Client(
+  process.env.GOOGLE_CLIENT_ID
+);
 
 
 const register = async (req,res)=>{
@@ -269,6 +274,78 @@ const resetPassword = async (req, res) => {
   }
 };
 
+const googleLogin = async (req, res) => {
+  try {
+    const { credential } = req.body;
+
+    if (!credential) {
+      return res.status(400).json({
+        success: false,
+        message: "Google credential is required",
+      });
+    }
+
+    const ticket = await googleClient.verifyIdToken({
+      idToken: credential,
+      audience: process.env.GOOGLE_CLIENT_ID,
+    });
+
+    const payload = ticket.getPayload();
+
+    const {
+      sub: googleId,
+      email,
+      name,
+      email_verified,
+    } = payload;
+
+    if (!email_verified) {
+      return res.status(401).json({
+        success: false,
+        message: "Google email is not verified",
+      });
+    }
+
+    let user = await User.findOne({ googleId });
+
+    if (!user) {
+      user = await User.findOne({
+        email: email.toLowerCase(),
+      });
+    }
+
+    if (!user) {
+      user = await User.create({
+        name,
+        email: email.toLowerCase(),
+        googleId,
+        authProvider: "google",
+      });
+    }
+
+    const token = generateToken(user._id, user.role);
+
+    res.status(200).json({
+      success: true,
+      token,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      },
+    });
+
+  } catch (error) {
+    console.error("Google login error:", error);
+
+    res.status(401).json({
+      success: false,
+      message: "Google authentication failed",
+    });
+  }
+};
+
 
 const getMe = async (req,res)=>{
   res.status(200).json({
@@ -278,4 +355,4 @@ const getMe = async (req,res)=>{
 };
 
 
-module.exports = {register,login, getMe, forgotPassword, resetPassword};
+module.exports = {register,login, getMe, forgotPassword, resetPassword, googleLogin};

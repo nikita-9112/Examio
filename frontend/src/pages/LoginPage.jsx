@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import api from "../sevices/api";
 
 import Card from "../components/ui/Card";
@@ -15,6 +15,9 @@ const LoginPage = () => {
 
 
   const {login} = useAuth();
+
+  const googleButtonRef = useRef(null);
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -44,6 +47,13 @@ const LoginPage = () => {
     }
   }
 
+  const handleGoogleLogin = async (response) => { try { const result = await api.post("/auth/google", { credential: response.credential, }); const { token, user } = result.data; saveAuth(token, user); login(user); // Role-based redirect 
+  if (user.role === "admin") { navigate("/admin"); } else { navigate("/dashboard"); } } catch (error) { console.log(error.response?.data); } };
+
+
+  useEffect(() => { if (!window.google || !googleButtonRef.current) { return; } window.google.accounts.id.initialize({ client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID, callback: handleGoogleLogin, }); window.google.accounts.id.renderButton( googleButtonRef.current, { theme: "outline", size: "large", width: 350, text: "signin_with", } ); }, []);
+
+
 return (
 <div
 className="
@@ -60,11 +70,7 @@ px-5
   <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-100 text-blue-600">
     <GraduationCap/>
   </div>
-    {/* <div className="mb-4 text-center">
-      <h2 className="text-blue-600 font-bold text-lg">
-        Examio
-      </h2>
-    </div> */}
+   
 
     <h1
       className="
@@ -122,6 +128,8 @@ px-5
       </Button>
 
     </form>
+
+    <div className="my-6 flex items-center gap-3"> <div className="h-px flex-1 bg-slate-200"></div> <span className="text-sm text-slate-500"> OR </span> <div className="h-px flex-1 bg-slate-200"></div> </div> <div ref={googleButtonRef} className="flex justify-center" ></div>
 
     <p
       className="
