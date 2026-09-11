@@ -65,6 +65,7 @@ const createSubjectPack = async(req,res)=>{
 
     res.status(201).json({
       success: true,
+      message:"SubjectPack Created Successfully",
       data: SubjectPack
     });
   }catch(error){

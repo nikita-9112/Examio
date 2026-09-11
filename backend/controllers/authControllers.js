@@ -49,6 +49,7 @@ const register = async (req,res)=>{
 
     res.status(201).json({
       success: true,
+      message: "User Register Successfully",
       token,
       user:{
         id:user._id,
@@ -93,6 +94,7 @@ const login = async (req,res)=>{
 
   res.status(200).json({
     success: true,
+    message: "Login successfully",
     token,
     user:{
       id:user._id,
@@ -327,6 +329,7 @@ const googleLogin = async (req, res) => {
 
     res.status(200).json({
       success: true,
+      message:"google login successful",
       token,
       user: {
         id: user._id,

@@ -47,11 +47,52 @@ const LoginPage = () => {
     }
   }
 
-  const handleGoogleLogin = async (response) => { try { const result = await api.post("/auth/google", { credential: response.credential, }); const { token, user } = result.data; saveAuth(token, user); login(user); // Role-based redirect 
-  if (user.role === "admin") { navigate("/admin"); } else { navigate("/dashboard"); } } catch (error) { console.log(error.response?.data); } };
+  const handleGoogleLogin = async (response) => {
+     try { 
+      const result = await api.post("/auth/google", { 
+        credential: response.credential,
+       }); 
+       
+       const { token, user } = result.data; 
+       
+       saveAuth(token, user);
+        login(user); 
 
 
-  useEffect(() => { if (!window.google || !googleButtonRef.current) { return; } window.google.accounts.id.initialize({ client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID, callback: handleGoogleLogin, }); window.google.accounts.id.renderButton( googleButtonRef.current, { theme: "outline", size: "large", width: 350, text: "signin_with", } ); }, []);
+        
+        // Role-based redirect 
+     if (user.role === "admin") { 
+      navigate("/admin");
+     } else { 
+      navigate("/dashboard"); 
+    } 
+  } catch (error) {
+    console.log(error.response?.data);
+
+  }
+ };
+
+
+  useEffect(() => {
+     if (!window.google || !googleButtonRef.current) {
+       return;
+       } 
+       
+       window.google.accounts.id.initialize({
+         client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID,
+          callback: handleGoogleLogin, 
+        }); 
+        
+        window.google.accounts.id.renderButton( 
+          
+          googleButtonRef.current, { 
+            theme: "outline", 
+            size: "large",
+             width: 350,
+              text: "signin_with", 
+            } 
+        );
+   }, []);
 
 
 return (
