@@ -1,6 +1,22 @@
+import { useNavigate } from "react-router-dom";
 import Button from "./ui/Button";
 
+
+
 const HeroSection = () => {
+
+  const navigate = useNavigate();
+
+
+
+  const BrowsePaper = ()=>{
+    navigate("/subject-packs")
+  
+  }
+  const learnMore = ()=>{
+    navigate("/about")
+  
+  }
 return (
 <section
 className="
@@ -75,13 +91,14 @@ to-indigo-50
         sm:flex-row
       "
     >
-      <Button size="lg">
+      <Button size="lg" onClick={BrowsePaper} >
         Browse Papers
       </Button>
 
       <Button
         variant="outline"
         size="lg"
+        onClick={learnMore}
       >
         Learn More
       </Button>
