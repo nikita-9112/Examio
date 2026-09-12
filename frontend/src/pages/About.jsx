@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 
 import Card from "../components/ui/Card";
 import Button from "../components/ui/Button";
+import Footer from "../components/Footer";
 
 const About = ()=> {
   return (
@@ -174,6 +175,8 @@ const About = ()=> {
         </div>
 
       </section>
+
+      <Footer/>
 
     </div>
   );

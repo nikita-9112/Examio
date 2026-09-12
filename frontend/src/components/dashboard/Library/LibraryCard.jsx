@@ -4,7 +4,6 @@ import {
 ArrowRight,
 BookOpen,
 Building2,
-CalendarDays,
 CheckCircle2,
 FileText,
 Clock,

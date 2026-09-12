@@ -32,6 +32,7 @@ import {
   uploadPdf,
   deletePaperFromSubjectPack,
 } from "../services/adminServices";
+import DemoPdfSection from "../../components/subject/DemoPdfSection";
 
 
 const SubjectPackDetails = () => {
@@ -226,12 +227,23 @@ const SubjectPackDetails = () => {
   };
 
   const handleViewPaper = (paper) => {
-    window.open(
-      paper.pdfUrl,
-      "_blank",
-      "noopener,noreferrer"
+    // window.open(
+    //   paper.pdfUrl,
+    //   "_blank",
+    //   "noopener,noreferrer"
+    // );
+
+    navigate(
+      `/paper/${id}/${paper._id}`
     );
   };
+
+  const handleDemoPdfview = () =>{
+    console.log("in side demo pdf view");
+    navigate(
+      `/paper/${id}/${paperId}`
+    );
+  }
 
   // Loading state
 
@@ -529,7 +541,7 @@ const SubjectPackDetails = () => {
 
       {/* Demo PDF */}
 
-      <section className="rounded-2xl border border-gray-200 bg-white p-6">
+      {/* <section className="rounded-2xl border border-gray-200 bg-white p-6">
 
         <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
 
@@ -548,15 +560,15 @@ const SubjectPackDetails = () => {
 
           {subjectPack.demoPdfUrl ? (
 
-            <a
-              href={subjectPack.demoPdfUrl}
+            <div
+              onClick={handleDemoPdfview}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2 rounded-xl border border-blue-200 bg-blue-50 px-4 py-2.5 text-sm font-semibold text-blue-700 hover:bg-blue-100 transition"
             >
               <FileText size={18} />
               View Demo PDF
-            </a>
+            </div>
 
           ) : (
 
@@ -568,7 +580,9 @@ const SubjectPackDetails = () => {
 
         </div>
 
-      </section>
+      </section> */}
+
+      <DemoPdfSection subjectPack={subjectPack} />
 
      
 

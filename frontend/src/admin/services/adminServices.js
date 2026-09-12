@@ -74,6 +74,17 @@ export const deletePaperFromSubjectPack = async (
   return response.data;
 };
 
+export const getPaper = async (subjectPackId, paperId) => {
+  const response = await api.get(
+    `/admin/paper/${subjectPackId}/${paperId}`,
+    {
+      responseType: "blob",
+    }
+  );
+  console.log(response);
+
+  return response.data;
+};
 
 export const getAdminDashboardStats = async() =>{
 

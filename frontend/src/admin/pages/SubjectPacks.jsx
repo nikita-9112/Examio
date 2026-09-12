@@ -35,6 +35,12 @@ const SubjectPacks = ()=>{
   
   const[deleting, setDeleting] = useState(false);
 
+  const [search, setSearch] = useState("");
+  const [semester, setSemester] = useState("");
+const [branch, setBranch] = useState("");
+const [course, setCourse] = useState("");
+const [university, setUniversity] = useState("");
+
 
   const {
     toggleSubjectPackStatus,
@@ -55,8 +61,13 @@ const SubjectPacks = ()=>{
       setLoading(true);
       setError("");
       const response = await AdmingetAllSubjectPacks();
-      console.log(response);
-      setPacks(response.data || []);
+
+
+      setPacks(
+        Array.isArray(response.data)
+      ? response.data
+      : []
+      );
       setLoading(false);
 
 
@@ -175,6 +186,43 @@ const SubjectPacks = ()=>{
     fetchSubjectPacks();
   },[])
 
+  
+const filteredPacks = packs.filter((pack) => {
+  const searchTerm = search.toLowerCase().trim();
+
+  const matchesSearch =
+    !searchTerm ||
+    pack.subjectName?.toLowerCase().includes(searchTerm) ||
+    pack.subjectCode?.toLowerCase().includes(searchTerm) ||
+    pack.university?.toLowerCase().includes(searchTerm) ||
+    pack.course?.toLowerCase().includes(searchTerm) ||
+    pack.branch?.toLowerCase().includes(searchTerm);
+
+  const matchesSemester =
+    !semester ||
+    String(pack.semester) === String(semester);
+
+  const matchesBranch =
+    !branch ||
+    pack.branch === branch;
+
+  const matchesCourse =
+    !course ||
+    pack.course === course;
+
+  const matchesUniversity =
+    !university ||
+    pack.university === university;
+
+  return (
+    matchesSearch &&
+    matchesSemester &&
+    matchesBranch &&
+    matchesCourse &&
+    matchesUniversity
+  );
+});
+
   if(loading){
     return(
       <div>
@@ -210,33 +258,45 @@ const SubjectPacks = ()=>{
         </Link>
       </div>
 
-       
-      <div  className=" mb-12">
-      <SearchInput/>
-      </div>
-      { packs.length === 0 ?
+       {/* search input field */}
+       <section className="mb-8">
+          <SearchInput
+            value={search}
+            onChange={setSearch}
+            placeholder="Search by subject, code, university..."
+          />
+        </section>
+
+      { packs.length === 0 ?(
         <EmptyState  title="No Subject Pack Added"
         description="Add Subject Pack " />
-        :
+      ):filteredPacks.length === 0?(
+        <EmptyState
+          title="No Matching Subject Packs"
+          description="Try searching with a different subject name, code, university, course, or branch."
+        />
+      ):(
+
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {packs.map((pack) =>(
+        {filteredPacks.map((pack) =>(
          
-     <div onClick={() => navigate( `/admin/subject-packs/${pack._id}`)}>
-     
-        <PackCard  
-          key={pack._id} 
-          pack={pack} 
-          onToggleStatus={handleToggleStatus}
-          onDelete={handleDeleteRequest}
-          onAddPaper={handleAddPaperRequest}
-          isToggling={isToggling}
-          />
-     </div>
+        <div onClick={() => navigate( `/admin/subject-packs/${pack._id}`)}>
+        
+            <PackCard  
+              key={pack._id} 
+              pack={pack} 
+              onToggleStatus={handleToggleStatus}
+              onDelete={handleDeleteRequest}
+              onAddPaper={handleAddPaperRequest}
+              isToggling={isToggling}
+              />
+        </div>
          
     
         ))}
       </div>
-      }
+      )
+    }
 
 
 {/* Add Paper Modal */}

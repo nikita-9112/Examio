@@ -1,6 +1,6 @@
 
 
-import { ArrowRight, BookOpen, Building2, DotSquare, FileText, MenuIcon, MenuSquare, MoreVertical, Pencil, Power, Trash2,PlusCircle } from "lucide-react";
+import {  BookOpen, Building2,  FileText, MoreVertical, Pencil, Power, Trash2,PlusCircle } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -131,9 +131,6 @@ const PackCard = ({
               )}
             </div>}
             
-            {/* <span className=" inline-block rounded-full  px-2 py-1 text-xs font-bold text-green-600 absolute right-0 ">
-             <MoreVertical className="w-5 h-5 text-gray-500 hover:text-gray-700"/>
-            </span> */}
           </div>
           <p className="mt-3 text-slate-700 flex  items-center font-medium text-sm">
           <Building2 size={18} className="text-purple-600 mr-2"/>
@@ -157,9 +154,6 @@ const PackCard = ({
 
 
         </div> 
-
-
-
   )
 
 }

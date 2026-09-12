@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 
 import purchaseService from "../sevices/purchaseService";
+import { getPaper } from "../admin/services/adminServices";
 
 
 // PDF.js worker configuration
@@ -70,22 +71,32 @@ const ProtectedPaperViewer = () => {
         setError("");
 
 
-        const response =
+        let response;
+        
+        console.log(user);
+        if(user?.role === "admin"){
+         response = await getPaper(subjectPackId, paperId) ;
+        }
+        else{
+
+           response =
           await purchaseService.getProtectedPaper(
             subjectPackId,
             paperId
           );
+        }
+      
 
 
-        const blob = new Blob(
-          [response.data],
-          {
-            type: "application/pdf",
-          }
-        );
+        // const blob = new Blob(
+        //   [response.data],
+        //   {
+        //     type: "application/pdf",
+        //   }
+        // );
 
 
-        blobUrl = URL.createObjectURL(blob);
+        blobUrl = URL.createObjectURL(response);
 
 
         setPdfFile(blobUrl);
@@ -112,8 +123,9 @@ const ProtectedPaperViewer = () => {
     };
 
 
-    fetchPaper();
-
+    if(user){
+      fetchPaper();
+    }
 
     // Cleanup Blob URL when component unmounts
     return () => {
@@ -126,7 +138,7 @@ const ProtectedPaperViewer = () => {
 
     };
 
-  }, [subjectPackId, paperId]);
+  }, [subjectPackId, paperId,user]);
 
 
   // ============================

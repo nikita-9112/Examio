@@ -2,7 +2,11 @@ const fs = require("fs");
 const cloudinary = require("../config/cloudinary");
 const uploadPdf = async(req,res)=>{
   try{
+    console.log(req.file);
+    console.log(req.body);
+
     if(!req.file){
+      console.log("no req.file");
       return res.status(400).json({
         success: false,
         message: "No file uploaded"
@@ -18,6 +22,7 @@ const uploadPdf = async(req,res)=>{
     );
 
     fs.unlinkSync(req.file.path);
+    console.log("done");
 
     res.status(200).json({
       success: true,

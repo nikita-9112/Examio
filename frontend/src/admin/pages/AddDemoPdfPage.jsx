@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useSubjectPackCreation } from "../contex/SubjectPackCreationContext";
 import api from "../../sevices/api";
 import { getToken } from "../../utils/auth";
+import { uploadPdf } from "../services/adminServices";
 
 
 const AddDemoPdfPage =  ()=>{
@@ -71,22 +72,17 @@ const AddDemoPdfPage =  ()=>{
       let demoPdfPublicId="";
 
       if(file) {
-        const uploadFormData = new FormData();
+       
 
-        uploadFormData.append("file",file);
-        uploadFormData.append("folder","demo-pdfs");
+          // Step 1: Upload PDF to Cloudinary
+        const uploadResponse = await uploadPdf(
+          file,
+          "demo-pdfs"
+        );
 
-        const token = getToken();
-        const uploadResponse = await api("/upload/pdf",{
-          method:"POST",
-          headers:{
-            Authorization:`Bearer ${token}`,
-          },
-          body: uploadFormData,
-        });
-
-        const uploadData = await uploadResponse.json();
-        if(!uploadResponse.ok || !uploadData.success){
+        console.log("upload response: ", uploadResponse);
+        const uploadData = await uploadResponse;
+        if( !uploadData.success){
 
           throw new Error(
             uploadData.message || "Failed to upload demo PDF."

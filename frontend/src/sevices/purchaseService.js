@@ -27,19 +27,19 @@ export const purchaseService = {
 
   getProtectedPaper: async (subjectPackId, paperId) => {
 
-    const response = await api.get(
+    const  response = await api.get(
       `v1/purchase/paper/${subjectPackId}/${paperId}`,
       {
         responseType: "blob",
       }
     );
 
-    return response;
+    return response.data;
   },
   
   getMyPurchases : async() =>{
     const response = await api.get("v1/purchase/my-purchases");
-    return response.data;
+    return response;
   },
 
 

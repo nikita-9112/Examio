@@ -16,7 +16,7 @@ const DemoPdfSection = ({subjectPack})=>{
 
   return(
    
-    <div className="mt-8 rounded-3xl border bg-white p-6 shadow-sm">
+    <div className="mt-8 rounded-3xl border border-gray-100 bg-white p-6 shadow-sm">
 
     <div className="flex items-center gap-3">
       <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-100">
@@ -42,7 +42,7 @@ const DemoPdfSection = ({subjectPack})=>{
 
       <div className="mt-6">
         {pdfLoading && (
-        <div className="flex h-[600px] flex-col items-center justify-center rounded-2xl border bg-slate-50">
+        <div className="flex h-[600px] flex-col items-center justify-center rounded-2xl border border-gray-100 bg-slate-50">
 
           <Loader2 className="h-8 w-8 animate-spin text-blue-600"/>
           <p className="text-slate-500 mt-3">Loading Preview...</p>

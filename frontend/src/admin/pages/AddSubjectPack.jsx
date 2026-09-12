@@ -36,18 +36,18 @@ const AddSubjectPack = () =>{
   
     <SubjectPackForm />
 
-{/* Action button */}
-<div className="flex justify-end gap-3 pt-2">
-  <button type="button" onClick={handleCancel} className="px-5 py-2.5 rounded-xl border border-gray-300 text-gray-700 font-medium hover:bg-gray-100 transition">
-    Cancel
-  </button>
+    {/* Action button */}
+    <div className="flex justify-end gap-3 pt-2">
+      <button type="button" onClick={handleCancel} className="px-5 py-2.5 rounded-xl border border-gray-300 text-gray-700 font-medium hover:bg-gray-100 transition">
+        Cancel
+      </button>
 
-  <button type="button" onClick={handleProceed} className="px-5 py-2.5 rounded-xl bg-blue-600 text-white font-medium hover:bg-blue-700 transition">
-    Proceed Further
-  </button>
-</div>
+      <button type="button" onClick={handleProceed} className="px-5 py-2.5 rounded-xl bg-blue-600 text-white font-medium hover:bg-blue-700 transition">
+        Proceed Further
+      </button>
+    </div>
 
-  </div>
+      </div>
   )
 }
 
