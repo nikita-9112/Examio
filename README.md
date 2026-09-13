@@ -766,31 +766,37 @@ Suggested sections:
 ### Home Page
 
 ``` text
-![home page image](image.png)
+<img width="1600" height="900" alt="image" src="https://github.com/user-attachments/assets/a42abcf6-c286-4ba5-bf8d-c8c282eba8b9" />
+
 ```
 
 ### Student Dashboard
 
 ``` text
-![student dashboard](image-2.png)
+<img width="1600" height="900" alt="image" src="https://github.com/user-attachments/assets/a0a935f0-ea4d-4329-8cd9-cdbac48c5d30" />
+
+
 ```
 
 ### Subject Pack
 
 ``` text
-![Alt text](image-1.png)
+<img width="1600" height="900" alt="image" src="https://github.com/user-attachments/assets/f30d4a77-92cc-4b44-b2b6-9c6bdd41ce38" />
+
 ```
 
 ### Admin Dashboard
 
 ``` text
-![admin dashboard](image-3.png)
+<img width="1600" height="900" alt="image" src="https://github.com/user-attachments/assets/1f1cff17-934d-4e93-9c30-0745ba40f1d6" />
+
 ```
 
 ### Subject Pack Management
 
 ``` text
-![student subject pack management page](image-4.png)
+<img width="1600" height="900" alt="image" src="https://github.com/user-attachments/assets/1ae9447a-254e-490b-8bd7-7270d9a1d7fa" />
+
 ```
 
 ------------------------------------------------------------------------
