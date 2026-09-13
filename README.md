@@ -608,7 +608,6 @@ Previews the production build locally.
 npm run lint
 ```
 
-Runs Oxlint.
 
 ------------------------------------------------------------------------
 
@@ -767,31 +766,31 @@ Suggested sections:
 ### Home Page
 
 ``` text
-Add screenshot here
+![home page image](image.png)
 ```
 
 ### Student Dashboard
 
 ``` text
-Add screenshot here
+![student dashboard](image-2.png)
 ```
 
 ### Subject Pack
 
 ``` text
-Add screenshot here
+![Alt text](image-1.png)
 ```
 
 ### Admin Dashboard
 
 ``` text
-Add screenshot here
+![admin dashboard](image-3.png)
 ```
 
 ### Subject Pack Management
 
 ``` text
-Add screenshot here
+![student subject pack management page](image-4.png)
 ```
 
 ------------------------------------------------------------------------
@@ -800,7 +799,6 @@ Add screenshot here
 
 Some possible improvements for future versions:
 
--   [ ] Production deployment
 -   [ ] Automated testing
 -   [ ] API documentation with Swagger/OpenAPI
 -   [ ] More advanced search and filtering

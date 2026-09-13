@@ -99,7 +99,7 @@ const filteredPacks = subjectPacks.filter((pack) => {
 
 const semesters = [
   ...new Set(
-    packs
+    subjectPacks
       .map((pack) => pack.semester)
       .filter(Boolean)
   ),

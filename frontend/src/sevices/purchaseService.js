@@ -39,7 +39,7 @@ export const purchaseService = {
   
   getMyPurchases : async() =>{
     const response = await api.get("v1/purchase/my-purchases");
-    return response;
+    return response.data;
   },
 
 
