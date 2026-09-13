@@ -3,11 +3,10 @@ import { Link, useNavigate } from "react-router-dom";
 import OverviewCard from "../components/OverviewCard";
 import PackCard from "../components/PackCard";
 import { useEffect, useState } from "react";
-import {getAllSubjectPacks} from "../../sevices/subjectService";
 import SkeletonCard from "../../components/ui/SkeletonCard";
 import ErrorState from "../../components/ui/ErrorState";
 import EmptyState from "../../components/ui/EmptyState";
-import { getAdminDashboardStats } from "../services/adminServices";
+import { AdmingetAllSubjectPacks, getAdminDashboardStats } from "../services/adminServices";
 
 const Dashboard = () =>{
 
@@ -32,7 +31,7 @@ const Dashboard = () =>{
       setError("");
 
      const [packsResponse, statsResponse] = await Promise.all([
-      getAllSubjectPacks(),
+      AdmingetAllSubjectPacks(),
       getAdminDashboardStats()
      ])
 
