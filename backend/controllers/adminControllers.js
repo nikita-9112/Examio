@@ -1,6 +1,5 @@
 const SubjectPack = require("../models/SubjectPack");
 const Purchase = require('../models/PurchaseModel');
-const Paper = require("../models/SubjectPack")
 
 const getDashboard = async (req,res)=>{
 
