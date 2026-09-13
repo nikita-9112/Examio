@@ -4,6 +4,7 @@ import {
   LayoutDashboard,
   LogOut,
   PlusCircle,
+  X,
 } from "lucide-react";
 import { NavLink, useNavigate } from "react-router-dom";
 
@@ -27,7 +28,7 @@ const menuItems = [
   },
 ];
 
-const AdminSidebar = () => {
+const AdminSidebar = ({isOpen, onClose}) => {
   const { logout } = useAuth();
   const navigate = useNavigate();
 
@@ -35,21 +36,54 @@ const AdminSidebar = () => {
     logout();
     navigate("/");
   };
+  const handleHome = () =>{
+    navigate("/");
+  }
 
   return (
-    <aside
-      className="
-        sticky top-0 z-40
-        flex h-screen w-72 shrink-0 flex-col
-        border-r border-slate-200
-        bg-white
-      "
-    >
+    <>
+
+  {/* Mobile overlay */}
+      {isOpen && (
+        <button
+          type="button"
+          aria-label="Close sidebar"
+          onClick={onClose}
+          className="
+            fixed inset-0 z-40
+            bg-black/30
+            lg:hidden
+          "
+        />
+      )}
+
+      <aside
+        className={`
+          fixed inset-y-0 left-0 z-50
+          flex h-screen w-72
+          flex-col
+          border-r border-slate-200
+          bg-white
+          shadow-xl
+          transition-transform duration-300 ease-in-out
+
+          lg:translate-x-0
+          lg:shadow-none
+
+          ${
+            isOpen
+              ? "translate-x-0"
+              : "-translate-x-full"
+          }
+        `}
+      >
       {/* ================= HEADER ================= */}
 
       <div className="border-b border-slate-200 px-5 py-5 sm:px-6 sm:py-6">
 
-        <div className="flex items-center gap-3">
+      <div className="flex items-center justify-between gap-3">
+
+        <div className="flex items-center gap-3" onClick={handleHome}>
 
           {/* Logo */}
           <div
@@ -84,7 +118,28 @@ const AdminSidebar = () => {
             </p>
           </div>
 
+          </div>
+
+        <button
+          type="button"
+          onClick={onClose}
+          className="
+            flex h-9 w-9 shrink-0
+            items-center justify-center
+            rounded-lg
+            text-slate-500
+            transition
+            hover:bg-slate-100
+            hover:text-slate-900
+            lg:hidden
+          "
+          aria-label="Close admin menu"
+        >
+          <X size={21} />
+        </button>
+
         </div>
+
 
         {/* Description */}
         <p
@@ -128,6 +183,7 @@ const AdminSidebar = () => {
               <NavLink
                 key={item.name}
                 to={item.path}
+                onClick={onClose}
                 end={item.path === "/admin"}
                 className={({ isActive }) => `
                   group relative
@@ -274,6 +330,7 @@ const AdminSidebar = () => {
       </div>
 
     </aside>
+  </>
   );
 };
 
