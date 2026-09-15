@@ -8,3 +8,5 @@ node_modules/
 !.env.example
 dist/
 build/
+../ExamIO_Demo_Papers.zip
+../pdf

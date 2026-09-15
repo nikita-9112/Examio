@@ -1,5 +1,13 @@
 require("dotenv").config();
 
+const dns = require("dns");
+
+dns.setServers([
+  "8.8.8.8",
+  "1.1.1.1"
+]);
+
+
 const mongoose = require("mongoose");
 const bcrupt = require("bcryptjs");
 const User = require("../models/User");
@@ -16,7 +24,8 @@ const createAdmin = async()=>{
 
     if(existingAdmin){
       console.log("Admin already exists");
-      process.exit();
+      console.log(existingAdmin.email);
+      process.exit(0);
     };
 
     const hashedPassword = await bcrupt.hash("Admin123",10);
@@ -28,7 +37,7 @@ const createAdmin = async()=>{
     });
 
     console.log("Admin created");
-    process.exit();
+    process.exit(0);
   }catch(error){
     console.log(error);
     process.exit(1);

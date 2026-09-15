@@ -20,7 +20,7 @@ const paperSchema = new mongoose.Schema({
   },
   publicId:{
     type:String,
-    requied:true,
+    required:true,
   },
   uploadedAt:{
     type: Date,
@@ -48,12 +48,12 @@ const SubjectPackSchema = new mongoose.Schema({
   },
   semester: {
     type: Number,
-    requied: true
+    required: true
   },
 
   subjectCode: {
     type: String,
-    requied: true,
+    required: true,
     trim: true,
     uppercase:true,
   },

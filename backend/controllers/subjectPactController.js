@@ -66,7 +66,7 @@ const createSubjectPack = async(req,res)=>{
     res.status(201).json({
       success: true,
       message:"SubjectPack Created Successfully",
-      data: SubjectPack
+      data: subjectPack
     });
   }catch(error){
     res.status(500).json({
@@ -106,7 +106,7 @@ const getAllSubjectPacks = async(req,res) =>{
       data: sanitizedPacks
     });
   }catch(error){
-    rs.status(500).json({
+    res.status(500).json({
       success: false,
       message: error.message
     });
