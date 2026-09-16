@@ -38,9 +38,6 @@ const getDashboardStats = async(req,res) =>{
   //  get total purchases
   const totalPurchases = await Purchase.countDocuments();
 
-  console.log("totalSubject packs: ", totalSubjectPacks);
-  console.log("totalPapers: ", totalPapers);
-  console.log("totalPurchases: ", totalPurchases);
 
   res.status(200).json({
     success: true,

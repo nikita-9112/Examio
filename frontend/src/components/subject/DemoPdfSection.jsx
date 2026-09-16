@@ -11,8 +11,7 @@ const DemoPdfSection = ({subjectPack})=>{
 
 
     // const demoPdfUrl = subjectPack?.demoPdfUrl || "";
-    const demoPdfUrl = subjectPack?.demoPdfUrl?
-    `${import.meta.env.VITE_API_URL}/public/${subjectPack.demoPdfUrl}` : null;
+    const demoPdfUrl = subjectPack?.demoPdfUrl || null;
 
   return(
    
@@ -41,6 +40,7 @@ const DemoPdfSection = ({subjectPack})=>{
        
 
       <div className="mt-6">
+
         {pdfLoading && (
         <div className="flex h-[600px] flex-col items-center justify-center rounded-2xl border border-gray-100 bg-slate-50">
 
@@ -83,9 +83,8 @@ const DemoPdfSection = ({subjectPack})=>{
     onClick={()=>{
       if(!showPreview){
         setPdfLoading(true);
-        setPdfError(false);
       }
-      setShowPreview(!showPreview)
+      setShowPreview(!showPreview);
     }}
     className="mt-6">
       {showPreview? "Hide Preview" : "Show Preview"}

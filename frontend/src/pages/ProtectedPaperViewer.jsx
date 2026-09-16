@@ -85,15 +85,6 @@ const ProtectedPaperViewer = () => {
             paperId
           );
         }
-      
-
-
-        // const blob = new Blob(
-        //   [response.data],
-        //   {
-        //     type: "application/pdf",
-        //   }
-        // );
 
 
         blobUrl = URL.createObjectURL(response);
