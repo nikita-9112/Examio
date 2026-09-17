@@ -122,6 +122,18 @@ const forgotPassword = async (req, res) => {
       });
     }
 
+     // Email service is intentionally disabled in production
+     if (process.env.PASSWORD_RESET_EMAIL_ENABLED !== "true") {
+      return res.status(503).json({
+        success: false,
+        code: "PASSWORD_RESET_EMAIL_DISABLED",
+        message:
+        "Email-based password reset is currently unavailable on the production demo." +
+          " Production email delivery requires a verified sending domain. " +
+          "The password reset functionality is implemented and available in the local development environment.",
+      });
+    }
+
     const user = await User.findOne({
       email: email.toLowerCase(),
     });
