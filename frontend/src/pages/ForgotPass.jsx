@@ -32,9 +32,15 @@ const ForgotPass = () => {
 
     } catch (error) {
 
+      const data = error.response?.data;
+
+      if (data?.code === "PASSWORD_RESET_EMAIL_DISABLED") {
+        setError(data.message);
+        return;
+      }
+    
       setError(
-        error.response?.data?.message ||
-        "Something went wrong. Please try again."
+        data?.message || "Unable to process your request. Please try again."
       );
 
     } finally {
