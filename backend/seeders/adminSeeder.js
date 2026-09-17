@@ -19,7 +19,7 @@ const createAdmin = async()=>{
     await connectDb();
 
     const existingAdmin = await User.findOne({
-      email: "admin@examio.com"
+      email: process.env.ADMIN_EMAIL
     });
 
     if(existingAdmin){
@@ -28,7 +28,7 @@ const createAdmin = async()=>{
       process.exit(0);
     };
 
-    const hashedPassword = await bcrupt.hash("Admin123",10);
+    const hashedPassword = await bcrupt.hash( process.env.ADMIN_PASS,10);
     await User.create({
       name:"Examio Admin",
       email: "admin@examio.com",
