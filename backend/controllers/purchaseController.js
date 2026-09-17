@@ -230,9 +230,7 @@ const getMyPurchases = async(req,res)=>{
   try{
     const purchases = await Purchase.find({
       user: req.user._id,
-      status:{
-        $in:["pending","completed"],
-      },
+      status:"completed",
     })
     .populate("subjectPack")
     .sort({createdAt : -1});
@@ -451,8 +449,32 @@ const createRazorpayOrder = async (req, res) => {
       });
     }
 
-    // 4. Create Razorpay order
-    // Razorpay amount must be in paise
+
+        // 4. Check whether a payment order is already pending
+        const pendingPurchase = await Purchase.findOne({
+          user: req.user._id,
+          subjectPack: subjectPackId,
+          status: "pending",
+        });
+    
+        if (pendingPurchase) {
+          console.log("Existing pending purchase:", pendingPurchase);
+    
+          return res.status(200).json({
+            success: true,
+            message: "Existing payment order found",
+            order: {
+              id: pendingPurchase.orderId,
+              amount: Math.round(pendingPurchase.amount * 100),
+              currency: "INR",
+            },
+            purchaseId: pendingPurchase._id,
+          });
+        }
+
+    //  Create Razorpay order
+
+    //5. Razorpay amount must be in paise
     const amountInPaise = Math.round(subjectPack.price * 100);
 
     const razorpayOrder = await razorpay.orders.create({
@@ -465,7 +487,7 @@ const createRazorpayOrder = async (req, res) => {
       },
     });
 
-    // 5. Create purchase record
+    // 6. Create pending purchase record
     const purchase = await Purchase.create({
       user: req.user._id,
       subjectPack: subjectPack._id,
