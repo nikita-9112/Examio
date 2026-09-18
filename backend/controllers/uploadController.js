@@ -37,6 +37,8 @@ const uploadPdf = async(req,res)=>{
       fs.unlinkSync(req.file.path);
     }
 
+    console.log(error);
+    
     res.status(500).json({
       success: false,
       message: error.message
