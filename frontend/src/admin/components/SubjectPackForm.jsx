@@ -56,6 +56,7 @@ const SubjectPackForm = ({
             name="university"
             value={subjectPackData.university || ""}
             onChange={handlechange}
+            required
             className="w-full px-4 py-3 rounded-xl border border-gray-300 bg-white outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value="">Select University</option>
@@ -73,6 +74,7 @@ const SubjectPackForm = ({
             name="course"
             value={subjectPackData.course || ""} 
             onChange={handlechange}
+            required
             className="w-full px-4 py-3 rounded-xl border border-gray-300 bg-white outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value="">Select Course</option>
@@ -90,6 +92,7 @@ const SubjectPackForm = ({
             <select name="branch"
             value={subjectPackData.branch || ""}
             onChange={handlechange}
+            required
             className="w-full px-4 py-3 rounded-xl border border-gray-300 bg-white outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value="">Select Branch</option>
@@ -109,6 +112,7 @@ const SubjectPackForm = ({
             <select name="semester"
             value={subjectPackData.semester || ""}
             onChange={handlechange}
+            required
             className="w-full px-4 py-3 rounded-xl border border-gray-300 bg-white outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value="">Select Semester</option>
@@ -136,6 +140,7 @@ const SubjectPackForm = ({
                   Subject Name
                 </label>
                 <input type="text" name="subjectName" value={subjectPackData.subjectName || ""} onChange={handlechange}
+                required
                 placeholder="e.g. Design and Analysis of Algorithems"
                 className="w-full px-4 py-3 rounded-xl border border-gray-300 bg-white outline-none focus:ring-2 focus:ring-blue-500"
                 />
@@ -147,6 +152,7 @@ const SubjectPackForm = ({
                   Subject Code
                 </label>
                 <input type="text" name="subjectCode" value={subjectPackData.subjectCode || ""} onChange={handlechange} 
+                required
                 placeholder="e.g. CS-403"
                 className="w-full px-4 py-3 rounded-xl border border-gray-300 bg-white outline-none focus:ring-2 focus:ring-blue-500"
                 />

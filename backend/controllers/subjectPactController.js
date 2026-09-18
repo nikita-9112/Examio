@@ -20,7 +20,7 @@ const createSubjectPack = async(req,res)=>{
       demoPdfPublicId,
     } = req.body;
 
-    if(!university || !course || !branch || !semester || !subjectCode || !subjectName  || !price ){
+    if( !university || !course || !branch || !semester || !subjectCode || !subjectName ){
       return res.status(400).json({
         success: false,
         message: "All requied fields are mandatory"

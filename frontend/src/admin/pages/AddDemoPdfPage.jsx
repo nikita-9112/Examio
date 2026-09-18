@@ -113,18 +113,21 @@ const AddDemoPdfPage =  ()=>{
 
       const token = getToken();
 
-      const response = await fetch("http://localhost:5000/api/subject-packs",{
-        method:"POST",
-        headers:{
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(createData),
-      });
+      const response = await api.post(
+        "/subject-packs",
+        createData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      
 
-      const data = await response.json();
+      const data = await response.data;
 
-      if(!response.ok || !data.success){
+      if( !data.success){
         throw new Error(
           data.message || "Failed to created SubejctPack."
         );
@@ -145,10 +148,7 @@ const AddDemoPdfPage =  ()=>{
       setIsCreating(false);
     }
 
-    console.log("Demo PDF: ", file);
-
-    console.log("Subject Pack creation completed.");
-    navigate("/admin/subject-packs");
+   
   };
 
   const handleSkip = async () =>{
@@ -176,19 +176,21 @@ const AddDemoPdfPage =  ()=>{
         demoPdfPublicId:"",
       };
       
-      const response = await fetch("http://localhost:5000/api/subject-packs",{
-        method:"POST",
-        headers:{
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(createData),
-      });
+      const response = await api.post(
+        "/subject-packs",
+        createData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       
-      const data = await response.json();
+      const data = await response.data;
 
-      if(!response.ok || !data.success){
+      if(!data.success){
         throw new Error(
           data.message || "Failed to created SubejctPack."
         );
@@ -196,6 +198,7 @@ const AddDemoPdfPage =  ()=>{
 
       resetSubjectPackData();
       navigate("/admin/subject-packs");
+
 
     }
     catch(error){
@@ -305,7 +308,7 @@ const AddDemoPdfPage =  ()=>{
       {/* Error */}
       {error &&(
        <p className="tex-sm text-red-500 mt-3">
-        {error} 
+        {error.message} 
        </p>
       )}
 
